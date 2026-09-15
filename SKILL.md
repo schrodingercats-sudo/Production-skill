@@ -184,22 +184,79 @@ Remember: `robots.txt` is not access control and must not be used to protect pri
 
 Do not fabricate structured data, reviews, ratings, customer counts, or other SEO-facing claims.
 
-## 7. Performance
+## 7. Performance and Scalability Audit
 
-Check the production build for:
+Performance is not only about making a page load faster. Audit frontend rendering, assets, APIs, databases, caching, infrastructure, and scaling bottlenecks together.
 
-- compressed/optimized images
-- sensible image dimensions and modern formats where useful
-- large JavaScript bundles
-- unnecessary dependencies
+### Frontend and asset performance
+
+Check for:
+
+- compressed and appropriately sized images
+- modern image formats where useful
+- lazy loading for below-the-fold or expensive media where appropriate
+- minified JavaScript and CSS in production
+- code splitting and sensible JavaScript chunks
+- unnecessary dependencies and unused packages
+- unnecessarily large JavaScript bundles
 - unnecessary client-side work
-- lazy loading/code splitting where appropriate
-- slow API calls
-- layout shifts
+- expensive components rendering when they do not need to
+- unnecessary React/component re-renders
+- deferred loading of non-critical scripts
 - excessive network requests
-- missing loading, empty, error, and success states
+- layout shifts
+- appropriate loading, empty, error, and success states
 
 Do not remove loading states just to make a demo look smoother.
+
+### API and application performance
+
+- Cache API responses when the data and freshness requirements make caching safe.
+- Cache expensive computations and repeated database queries where appropriate.
+- Compress API responses/payloads when supported and beneficial.
+- Avoid sending fields or records the client does not need.
+- Debounce high-frequency input handlers such as search, filtering, and autocomplete when appropriate.
+- Paginate large lists instead of loading unbounded datasets into the browser.
+- Lazy-load expensive features when they are not needed immediately.
+- Defer non-critical scripts and work until after critical content is available.
+
+Do not add caching blindly. Respect authentication, personalization, invalidation, freshness, and sensitive data requirements.
+
+### Database performance
+
+- Index columns used frequently for filtering, joins, sorting, and lookups when justified by query patterns.
+- Inspect slow or expensive queries.
+- Cache expensive queries when appropriate.
+- Look for N+1 database queries, especially inside loops, nested resources, and list endpoints.
+- Avoid fetching the same records repeatedly.
+- Use pagination for large database-backed collections.
+- Use database connection pooling for applications that make repeated database connections.
+- Avoid over-indexing tables when the write cost and storage overhead outweigh the benefit.
+
+### Infrastructure and delivery
+
+- Use a CDN for static assets and other cacheable content when it materially improves latency or reduces origin load.
+- Consider a load balancer when the application needs multiple application instances or traffic distribution. Do not add one to a small single-instance app without a scaling requirement.
+- Verify caching layers, CDN behavior, and cache invalidation.
+- Check API and database latency under realistic production conditions.
+- Test the production build rather than relying only on development-mode performance.
+
+### Performance anti-patterns
+
+Actively look for:
+
+- N+1 database queries
+- unnecessary re-renders
+- unused dependencies
+- unbounded list fetching
+- uncompressed images or API payloads
+- blocking non-critical scripts
+- loading everything on the initial page
+- expensive queries executed repeatedly without caching
+- missing database indexes for proven query bottlenecks
+- opening excessive database connections instead of pooling
+
+Do not optimize based on fashion. Identify the actual bottleneck, then apply the simplest fix that improves it.
 
 ## 8. Mobile and Responsive UX
 
@@ -331,6 +388,16 @@ Before declaring the project ready, verify as applicable:
 - [ ] Mobile layouts work
 - [ ] Images/assets are optimized
 - [ ] Loading/empty/error states exist
+- [ ] API and database performance are reviewed
+- [ ] Caching is used where appropriate
+- [ ] Database indexes and query patterns are reviewed
+- [ ] N+1 queries are checked
+- [ ] Large lists are paginated
+- [ ] CDN/load balancing are considered where appropriate
+- [ ] Database connection pooling is configured where needed
+- [ ] JavaScript/CSS are optimized for production
+- [ ] Unused dependencies are removed
+- [ ] Non-critical scripts are deferred where appropriate
 - [ ] Console/network errors are resolved
 - [ ] No fake credibility or unsupported claims remain
 - [ ] Production build succeeds
@@ -352,4 +419,4 @@ Do not claim something is secure, compliant, accessible, or production-ready mer
 
 The goal is not to make every website look the same.
 
-The goal is to make every shipped website feel **intentional, honest, usable, secure, accessible, technically clean, and ready for real users**.
+The goal is to make every shipped website feel **intentional, honest, usable, secure, accessible, technically clean, performant, scalable where needed, and ready for real users**.
