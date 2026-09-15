@@ -86,14 +86,14 @@ Production Pup includes **user-invocable slash commands** for focused workflows.
 | Command | Purpose |
 | --- | --- |
 | `/production-pup` | Run the complete Production Pup audit. |
-| `/production-pup/fix` | Audit, implement relevant fixes, then verify them. |
-| `/production-pup/report` | Audit only and produce a structured readiness report. No project changes. |
-| `/production-pup/security` | Focus on secrets, auth, permissions, injection, abuse protection, uploads, and browser security. |
-| `/production-pup/seo` | Focus on SEO, metadata, crawling, structured data, social previews, and discoverability. |
-| `/production-pup/performance` | Focus on frontend, API, database, caching, bundles, queries, and scalability. |
-| `/production-pup/design` | Focus on visual quality, design systems, UX polish, and anti-vibecoding patterns. |
-| `/production-pup/accessibility` | Focus on keyboard, semantic HTML, contrast, labels, motion, and accessible interaction. |
-| `/production-pup/launch` | Run the final release-readiness gate and identify blockers before shipping. |
+| `/fix` | Audit, implement relevant fixes, then verify them. |
+| `/report` | Audit only and produce a structured readiness report. No project changes. |
+| `/security` | Focus on secrets, auth, permissions, injection, abuse protection, uploads, and browser security. |
+| `/seo` | Focus on SEO, metadata, crawling, structured data, social previews, and discoverability. |
+| `/performance` | Focus on frontend, API, database, caching, bundles, queries, and scalability. |
+| `/design` | Focus on visual quality, design systems, UX polish, and anti-vibecoding patterns. |
+| `/accessibility` | Focus on keyboard, semantic HTML, contrast, labels, motion, and accessible interaction. |
+| `/launch` | Run the final release-readiness gate and identify blockers before shipping. |
 
 ### Example
 
@@ -104,26 +104,26 @@ Production Pup includes **user-invocable slash commands** for focused workflows.
 Runs the complete audit.
 
 ```text
-/production-pup/security
+/security
 ```
 
 Runs only the security-focused workflow.
 
 ```text
-/production-pup/fix
+/fix
 ```
 
 Audits, fixes relevant issues, and verifies the changes.
 
 ```text
-/production-pup/report
+/report
 ```
 
 Creates a report without modifying the project.
 
 ## 🛠️ How to Use
 
-The main skill lives in `SKILL.md`. Focused slash-command workflows live under `.claude/commands/production-pup/`.
+The main skill lives in `SKILL.md`. Focused slash-command workflows live directly under `.claude/commands/`.
 
 Give the skill to your AI coding agent or use the slash commands when your agent supports repository command files.
 
@@ -208,15 +208,15 @@ Production-skill/
 ├── production_ready_website_app_skill_merged.md
 ├── .claude/
 │   └── commands/
-│       └── production-pup/
-│           ├── security.md
-│           ├── seo.md
-│           ├── performance.md
-│           ├── design.md
-│           ├── accessibility.md
-│           ├── fix.md
-│           ├── report.md
-│           └── launch.md
+│       ├── production-pup.md
+│       ├── fix.md
+│       ├── report.md
+│       ├── security.md
+│       ├── seo.md
+│       ├── performance.md
+│       ├── design.md
+│       ├── accessibility.md
+│       └── launch.md
 └── assets/
     └── production-pup-banner.png
 ```
