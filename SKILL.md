@@ -7,18 +7,11 @@ description: Turn vibecoded websites and web apps into production-ready products
 
 Production Pup is a production-readiness quality gate for websites and web apps.
 
-Do not stop at "it works." Before declaring a project ready, inspect the product as a real user would and audit the areas that apply. Do not blindly satisfy every checklist item. Verify what can be verified, identify what cannot be verified, and clearly report anything still outstanding.
+Do not stop at "it works." Inspect the product as a real user would. Audit only what applies, verify what can be verified, identify uncertainty, and clearly report anything outstanding.
 
 ## When to Use
 
-Use this skill when:
-
-- launching or preparing to launch a website or web app
-- reviewing a finished or nearly finished site
-- polishing a vibecoded or AI-generated website
-- fixing production-readiness issues
-- preparing a landing page, SaaS product, dashboard, ecommerce site, portfolio, or web app for real users
-- performing a final pre-launch audit
+Use this skill when launching, reviewing, polishing, fixing, or preparing a website, landing page, SaaS product, dashboard, ecommerce site, portfolio, or web app for real users.
 
 ## 1. Understand the Product First
 
@@ -171,14 +164,21 @@ For public sites, audit:
 - unique descriptive page titles
 - useful page-specific meta descriptions
 - logical heading hierarchy
-- intentional canonical URLs
+- one clear primary H1 per page unless the document structure genuinely requires otherwise
+- intentional canonical tags
 - valid `sitemap.xml`
 - correctly configured `robots.txt`
 - accurate schema.org structured data where useful
-- Open Graph/social preview metadata
+- Open Graph/social preview metadata, including `og:image`
 - real favicon/app icons
 - useful custom 404 page
 - working internal links and routes
+- clean, descriptive URL slugs
+- broken links
+- image alt text
+- Core Web Vitals
+- search-engine tooling such as Google Search Console when relevant
+- a realistic backlink/off-site discovery strategy when SEO growth is a goal
 
 Remember: `robots.txt` is not access control and must not be used to protect private data.
 
@@ -262,7 +262,20 @@ Do not optimize based on fashion. Identify the actual bottleneck, then apply the
 
 Test real small-screen layouts.
 
-Check navigation, forms, buttons, text wrapping, images, cards, tables, modals, dialogs, horizontal overflow, touch targets, sticky/fixed elements, keyboard behavior, and mobile inputs.
+Check:
+
+- mobile navigation/menu
+- forms and inputs
+- buttons and touch targets
+- text wrapping
+- images and cards
+- tables
+- modals/dialogs
+- horizontal overflow
+- sticky/fixed elements
+- keyboard behavior
+- viewport sizing
+- dark-mode behavior when provided
 
 A desktop-only site is not finished.
 
@@ -279,6 +292,7 @@ Check:
 - correct link semantics
 - useful alt text
 - decorative images appropriately ignored by assistive technology
+- skip-to-content links
 - reduced-motion support where relevant
 - adequate touch targets
 - readable text
@@ -300,11 +314,14 @@ Test important forms with:
 - network failures
 - server errors
 - successful submissions
+- clear confirmation/success states
 - keyboard navigation
 - mobile input
 - spam and abuse cases
 
 Client-side validation improves UX. Server-side validation is the security boundary. Use both.
+
+For password fields, provide a password-visibility toggle when it improves usability and does not weaken security.
 
 ## 11. Product Demonstration
 
@@ -354,8 +371,10 @@ Before shipping:
 - verify environment-specific configuration
 - verify error handling
 - verify deployment configuration
+- verify production assets are compressed/minified appropriately
+- verify custom styling is deliberate rather than relying on accidental defaults
 
-## 14. Navigation and UX
+## 14. Navigation and UX Polish
 
 Verify that:
 
@@ -368,8 +387,37 @@ Verify that:
 - success and error feedback is understandable
 - users can recover from mistakes
 - empty states explain what to do next
+- hover states exist on interactive buttons/controls where useful
+- focus states are visible for keyboard users
+- a sticky header is used when it genuinely improves navigation
+- a mobile menu works correctly when navigation requires it
+- a scroll-back-to-top control is available on long pages when useful
+- a scroll progress indicator is used only when it adds meaningful orientation
+- loading animations communicate actual work without becoming distracting
+- async UI does not flash or jump unnecessarily
 
-## 15. Final Pre-Launch Gate
+## 15. Small Details and Micro-Interactions
+
+When appropriate to the product, inspect for small usability details that make the interface feel finished rather than decorative:
+
+- dark-mode toggle that actually changes the interface correctly and persists when expected
+- expandable FAQ sections with accessible controls
+- password visibility toggle on password fields
+- clear newsletter signup flow
+- clear confirmation state after submissions
+- simple cookie banner when applicable
+- copy-to-clipboard buttons with visible success/failure feedback
+- useful external-link indicators where needed
+- sensible link tracking that respects privacy and does not secretly track users
+- custom stylesheet/design tokens instead of scattered one-off styling
+- sticky header behavior that does not cover content
+- scroll progress/back-to-top controls that remain keyboard accessible
+- skip-to-content links for keyboard and screen-reader users
+- loading animations or skeletons for genuinely asynchronous content
+
+Do not add these features just to make a checklist longer. Add them when they improve usability, accessibility, clarity, or product polish.
+
+## 16. Final Pre-Launch Gate
 
 Before declaring the project ready, verify as applicable:
 
@@ -381,11 +429,23 @@ Before declaring the project ready, verify as applicable:
 - [ ] HTTPS and browser security are configured
 - [ ] Privacy/legal requirements are addressed
 - [ ] SEO basics are complete
+- [ ] Meta titles and descriptions are correct
+- [ ] Canonicals, sitemap, and robots are correct
+- [ ] Structured data is accurate where used
 - [ ] Favicon and social metadata exist
+- [ ] Alt text and heading hierarchy are correct
+- [ ] Broken links are resolved
+- [ ] Clean URL slugs are used where appropriate
+- [ ] Core Web Vitals/performance are reviewed
+- [ ] Search Console or equivalent tooling is considered when relevant
 - [ ] 404 and error states work
 - [ ] Forms are validated
+- [ ] Confirmation/success states work
+- [ ] Password visibility controls work where appropriate
 - [ ] Accessibility basics pass
-- [ ] Mobile layouts work
+- [ ] Skip-to-content works where appropriate
+- [ ] Mobile navigation and layouts work
+- [ ] Dark mode works if provided
 - [ ] Images/assets are optimized
 - [ ] Loading/empty/error states exist
 - [ ] API and database performance are reviewed
@@ -403,7 +463,7 @@ Before declaring the project ready, verify as applicable:
 - [ ] Production build succeeds
 - [ ] Real product content is present
 
-## 16. How to Report the Audit
+## 17. How to Report the Audit
 
 For each applicable area, classify the result as one of:
 
