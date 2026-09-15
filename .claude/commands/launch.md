@@ -2,7 +2,7 @@
 
 Run the final pre-launch Production Pup gate.
 
-Read `SKILL.md` first and use its Final Pre-Launch Gate, Security Verification Matrix, and audit-reporting rules as the source of truth.
+Read `SKILL.md` first and use its Final Pre-Launch Gate, 70-check Security Verification Matrix, and audit-reporting rules as the source of truth.
 
 ## Command
 
@@ -11,26 +11,33 @@ Read `SKILL.md` first and use its Final Pre-Launch Gate, Security Verification M
 Perform a complete release-readiness check covering:
 
 - core functionality
-- authentication, authorization, object permissions, tenant isolation, and admin routes
-- secrets, environment files, Git history, and production artifacts
-- input validation, SQL/NoSQL injection, XSS, CSRF, SSRF, path traversal, command injection, unsafe deserialization, and mass assignment where relevant
-- sessions, cookies, JWT validation, OAuth/OIDC, password reset, and webhook verification where relevant
-- payment and entitlement checks on the server
-- rate limits, abuse controls, AI spend controls, and default credentials
-- staging/test environment isolation and production debug leakage
-- dependency vulnerabilities, package supply-chain risk, and abandoned dependencies
-- prompt injection and AI tool permission boundaries where AI exists
-- audit logs, security monitoring, alerts, backups, restore testing, and internal dashboards where required
-- HTTPS/TLS, CORS, security headers, and secure cookies
+- authentication, authorization, privileged-account MFA, and permissions
+- secrets and Git history
+- input/API protection, business-logic abuse, race conditions, and fail-closed behavior
+- rate limits, resource limits, and abuse protection
+- AI prompt injection, sensitive-data disclosure, unsafe AI output handling, tool permissions, and agent agency
+- webhook signatures, replay/duplicate processing, and server-side payment/entitlement checks
+- OAuth/OIDC/social login and account enumeration
+- file uploads, path traversal, SSRF, and open redirects
+- HTTPS/TLS, cookies, CORS, security headers, and browser storage
+- dependencies, lockfiles, CI/CD credentials, build actions, and pinned sensitive actions
+- audit logs, monitoring/alerts, backups/restores, and internal dashboards
+- GraphQL/WebSocket/realtime security where used
 - privacy and legal requirements
 - SEO basics
+- unique page titles and useful meta descriptions
+- sensible H1/heading structure and canonical URLs
+- sitemap, robots configuration, and `lang` attribution
 - favicon and social metadata
-- sitemap and robots configuration
 - 404 and error states
-- form validation
+- broken links and footer links
+- form validation, success messages, error messages, and duplicate-submission handling
+- clickable logo/home navigation where appropriate
+- clickable phone numbers and email addresses where appropriate
+- no placeholder text or unused navigation
 - accessibility
-- mobile layouts
-- optimized assets
+- mobile layouts, mobile menus, horizontal-overflow checks, and overall mobile optimization
+- optimized and appropriately sized images
 - loading, empty, success, and error states
 - API and database performance
 - caching
@@ -40,12 +47,12 @@ Perform a complete release-readiness check covering:
 - CDN/load balancing where appropriate
 - connection pooling where needed
 - production JavaScript/CSS optimization
-- unused dependencies
+- unused dependencies and assets
 - deferred non-critical scripts
 - console and network errors
 - real content and claims
 - successful production build
 
-For security findings, use PASS, FAIL, UNKNOWN, or NOT APPLICABLE and cite evidence. Do not treat UNKNOWN as PASS. Do not declare the project ready if critical items are outstanding or unverifiable. Produce a concise release report with blockers, evidence, and recommended next actions.
+Do not declare the project ready if critical items are outstanding or unverifiable. Produce a concise release report with evidence, blockers, UNKNOWN items, and recommended next actions.
 
 Arguments: $ARGUMENTS
