@@ -38,29 +38,41 @@ The skill is deliberately skeptical. It does not treat a checklist as proof that
 | --- | --- |
 | **Product understanding** | Goals, users, routes, data, integrations, auth, privacy, and product-specific requirements before implementation. |
 | **Design quality** | Intentional visual systems, typography, spacing, color, motion, hierarchy, and protection against generic AI/vibe-coded UI. |
-| **Security** | Evidence-driven 54-check coverage across secrets, auth, authorization, injection, sessions, APIs, payments, files, AI tools, dependencies, infrastructure, logging, backups, and browser security. |
+| **Security** | Evidence-driven **70-check** coverage across secrets, auth, MFA, authorization, injection, business logic, race conditions, sessions, APIs, payments, files, AI security, CI/CD, browser security, redirects, realtime endpoints, and more. |
 | **Privacy** | Privacy policies, terms, cookies, consent, analytics, tracking, third-party embeds, and data minimization. |
 | **SEO** | Titles, descriptions, headings, canonicals, sitemap, robots, structured data, social previews, favicon, 404 pages, and broken links. |
 | **Performance** | Image optimization, bundle size, loading states, API latency, layout stability, caching, database queries, pagination, and production-build performance. |
-| **Responsive UX** | Mobile layouts, navigation, forms, tables, dialogs, touch targets, overflow, and fixed elements. |
+| **Responsive UX** | Mobile layouts, navigation, forms, tables, dialogs, touch targets, overflow, clickable contact details, and mobile optimization. |
 | **Accessibility** | Keyboard navigation, focus states, contrast, semantic HTML, labels, alt text, motion, controls, and useful errors. |
-| **Forms** | Client and server validation, invalid input, duplicate submissions, failures, mobile input, and spam/abuse cases. |
+| **Forms** | Client and server validation, invalid input, duplicate submissions, success/error messages, failures, mobile input, and spam/abuse cases. |
 | **Trust** | No fabricated testimonials, metrics, customer logos, certifications, capabilities, business details, or unsupported claims. |
-| **Production cleanup** | Console errors, network failures, starter artifacts, debug mode, source maps, dependencies, configuration, and deployment readiness. |
-| **Final verification** | A clear distinction between implemented, verified, provider-handled, not applicable, and outstanding requirements. |
+| **Production cleanup** | Console errors, network failures, starter artifacts, placeholder text, unused navigation, debug mode, source maps, dependencies, configuration, and deployment readiness. |
+| **Final verification** | A clear distinction between evidence-backed PASS/FAIL/UNKNOWN/N/A security results and broader production-readiness status. |
 
 ## 🔐 Evidence-Driven Security
 
-The security layer now includes the supplied Part 3 launch filter as a cumulative **54-check verification matrix**. The key rule is simple: if you cannot point to the code, setting, configuration, test, or log that proves a guardrail exists, do not mark it PASS.
+Production Pup now incorporates the supplied Part 4 launch filter as a cumulative **70-check security verification matrix**. The governing rule is simple: if you cannot point to the code, setting, configuration, test, or log that proves a guardrail exists, do not mark it PASS. fileciteturn75file0L8-L25
 
-Security checks cover four groups:
+The final 16 checks add coverage for:
 
-- **Secrets, auth, authorization, and input**: credentials, `.env`, hardcoded secrets, authentication, server-side permissions, cross-user access, database rules, admin routes, debug tooling, logs, Git history, frontend exposure, validation, SQL injection, and NoSQL injection.
-- **Web, sessions, APIs, files, and payments**: XSS, CSRF, uploads, path traversal, SSRF, password reset, sessions, JWTs, CORS, rate limits, staging, default credentials, webhooks, payments, IDOR/BOLA, user-controlled roles/IDs, logs, and source maps.
-- **Dependencies, AI, data, and infrastructure**: vulnerable or malicious packages, prompt injection, AI tool authorization, least-privilege databases, audit logs, monitoring, backups, internal dashboards, security headers, cookies, encryption, tenant isolation, AI-generated code review, mass assignment, OS command injection, deserialization, and OAuth/OIDC.
-- **Verification discipline**: every relevant finding is classified as PASS, FAIL, UNKNOWN, or NOT APPLICABLE, with evidence and a verification path.
+- MFA on privileged accounts
+- account enumeration
+- business-logic abuse
+- race conditions
+- webhook replay and duplicate processing
+- overpowered CI/CD credentials
+- untrusted build actions/scripts
+- unpinned build dependencies
+- fail-open security checks
+- resource limits
+- AI sensitive-information disclosure
+- unsafe use of AI output
+- excessive AI-agent agency
+- sensitive browser storage
+- open redirects
+- GraphQL/WebSocket/realtime endpoint security
 
-This is an audit framework, not a penetration test or a guarantee that an application cannot be compromised.
+These checks are explicitly defined in the supplied Part 4 document on page 3. fileciteturn75file0L202-L254
 
 ## 🧭 How It Thinks
 
@@ -85,7 +97,7 @@ Production pass
     ↓
 Trust pass
     ↓
-Final visual audit
+Final visual + mobile audit
     ↓
 Verify what is actually ready
 ```
@@ -101,7 +113,7 @@ Production Pup includes **user-invocable slash commands** for focused workflows.
 | `/production-pup` | Run the complete Production Pup audit. |
 | `/fix` | Audit, implement relevant fixes, then verify them. |
 | `/report` | Audit only and produce a structured readiness report. No project changes. |
-| `/security` | Run the evidence-driven security audit, including the 54-check matrix. |
+| `/security` | Run the 70-check evidence-driven security workflow. |
 | `/seo` | Focus on SEO, metadata, crawling, structured data, social previews, and discoverability. |
 | `/performance` | Focus on frontend, API, database, caching, bundles, queries, and scalability. |
 | `/design` | Focus on visual quality, design systems, UX polish, and anti-vibecoding patterns. |
@@ -120,7 +132,7 @@ Runs the complete audit.
 /security
 ```
 
-Runs the evidence-driven security workflow.
+Runs the 70-check security workflow with evidence requirements.
 
 ```text
 /fix
@@ -151,6 +163,7 @@ Use the skill when asking an agent to:
 - improve security and privacy
 - fix accessibility or responsive issues
 - clean up a generated/vibe-coded interface
+- review AI-agent permissions and production security
 
 The preferred workflow is to invoke the relevant Production Pup command rather than manually pasting a long prompt.
 
@@ -163,20 +176,25 @@ Before making that claim, the project should have:
 - working core functionality
 - protected secrets
 - server-side authorization
+- privileged-account protection where appropriate
 - validated user input
-- appropriate abuse protection
+- appropriate abuse and resource protection
+- business logic enforced server-side
+- safe concurrency and webhook processing where relevant
+- controlled CI/CD credentials and dependencies
+- secure AI inputs, outputs, tools, and agent permissions where AI exists
 - privacy/legal pages where required
 - intentional analytics and tracking
 - useful SEO metadata on public pages
 - accessible interactions
-- responsive layouts
+- responsive layouts without accidental overflow
+- useful success and error feedback
 - loading, empty, success, and error states
 - optimized assets and reasonable performance
 - a clean production build
 - no unexplained critical console or network errors
 - no fake credibility or unsupported claims
 - a coherent, product-specific visual system
-- applicable security checks verified with evidence
 
 If something cannot be verified, **say so instead of pretending it is done.**
 
@@ -194,8 +212,11 @@ Gradients, glassmorphism, giant shadows, generic bento grids, decorative code wi
 - [ ] Terms exist if required
 - [ ] No frontend secrets
 - [ ] HTTPS is configured
-- [ ] Server-side auth and object permissions are verified
-- [ ] Security findings are evidence-backed
+- [ ] Privileged accounts use MFA where supported
+- [ ] Business logic and permissions are enforced server-side
+- [ ] Webhooks are verified and safely deduplicated where used
+- [ ] CI/CD credentials and actions are scoped
+- [ ] AI data, output, tools, and agent permissions are controlled where used
 - [ ] Page titles and descriptions are correct
 - [ ] Social preview is configured
 - [ ] Favicon is present
@@ -203,12 +224,17 @@ Gradients, glassmorphism, giant shadows, generic bento grids, decorative code wi
 - [ ] Images are optimized
 - [ ] Performance has been checked
 - [ ] Contrast has been checked
-- [ ] Mobile layout works
+- [ ] Mobile layout works without unintended horizontal overflow
+- [ ] Mobile menu works
+- [ ] Phone/email links are clickable where appropriate
+- [ ] Logo/home navigation works where expected
 - [ ] Tracking and cookie behavior is intentional
 - [ ] Custom 404 exists
-- [ ] Broken links are fixed
+- [ ] Broken links and footer links are fixed
 - [ ] Forms validate correctly
-- [ ] Spam protection exists where needed
+- [ ] Success and error messages are useful
+- [ ] Placeholder text and unused navigation are removed
+- [ ] Spam/resource protection exists where needed
 - [ ] Keyboard navigation works
 - [ ] Claims and business details are real
 - [ ] Production build has been tested
