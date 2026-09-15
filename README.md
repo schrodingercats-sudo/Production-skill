@@ -185,4 +185,16 @@ The banner artwork is intentionally kept separate from the skill itself so the d
 
 ---
 
+## Star History
+
+<a href="https://www.star-history.com/?repos=schrodingercats-sudo%2Fproduction-skill&type=timeline&legend=bottom-right">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=schrodingercats-sudo/production-skill&type=date&theme=dark&legend=bottom-right" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=schrodingercats-sudo/production-skill&type=date&legend=bottom-right" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=schrodingercats-sudo/production-skill&type=date&legend=bottom-right" />
+ </picture>
+</a>
+
+---
+
 <p align="center">Made for builders who want the last 10% to actually matter. 🐾</p>
