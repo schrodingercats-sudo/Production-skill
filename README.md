@@ -11,9 +11,11 @@
 </p>
 
 <p align="center">
-  <a href="./production_ready_website_app_skill_merged.md">Skill File</a>
+  <a href="./SKILL.md">Skill File</a>
   ·
   <a href="#what-it-checks">What It Checks</a>
+  ·
+  <a href="#slash-commands">Slash Commands</a>
   ·
   <a href="#how-to-use">How to Use</a>
 </p>
@@ -39,7 +41,7 @@ The skill is deliberately skeptical. It does not treat a checklist as proof that
 | **Security** | Secrets, authentication, authorization, XSS, SQL injection, CSRF, CORS, HTTPS, secure cookies, security headers, uploads, rate limits, and abuse controls. |
 | **Privacy** | Privacy policies, terms, cookies, consent, analytics, tracking, third-party embeds, and data minimization. |
 | **SEO** | Titles, descriptions, headings, canonicals, sitemap, robots, structured data, social previews, favicon, 404 pages, and broken links. |
-| **Performance** | Image optimization, bundle size, loading states, API latency, layout stability, and production-build performance. |
+| **Performance** | Image optimization, bundle size, loading states, API latency, layout stability, caching, database queries, pagination, and production-build performance. |
 | **Responsive UX** | Mobile layouts, navigation, forms, tables, dialogs, touch targets, overflow, and fixed elements. |
 | **Accessibility** | Keyboard navigation, focus states, contrast, semantic HTML, labels, alt text, motion, controls, and useful errors. |
 | **Forms** | Client and server validation, invalid input, duplicate submissions, failures, mobile input, and spam/abuse cases. |
@@ -77,11 +79,53 @@ Verify what is actually ready
 
 A polished interface cannot compensate for broken authorization, leaked API keys, missing error states, or fake claims.
 
+## ⚡ Slash Commands
+
+Production Pup includes **user-invocable slash commands** for focused workflows. The commands use the main `SKILL.md` as their source of truth.
+
+| Command | Purpose |
+| --- | --- |
+| `/production-pup` | Run the complete Production Pup audit. |
+| `/production-pup/fix` | Audit, implement relevant fixes, then verify them. |
+| `/production-pup/report` | Audit only and produce a structured readiness report. No project changes. |
+| `/production-pup/security` | Focus on secrets, auth, permissions, injection, abuse protection, uploads, and browser security. |
+| `/production-pup/seo` | Focus on SEO, metadata, crawling, structured data, social previews, and discoverability. |
+| `/production-pup/performance` | Focus on frontend, API, database, caching, bundles, queries, and scalability. |
+| `/production-pup/design` | Focus on visual quality, design systems, UX polish, and anti-vibecoding patterns. |
+| `/production-pup/accessibility` | Focus on keyboard, semantic HTML, contrast, labels, motion, and accessible interaction. |
+| `/production-pup/launch` | Run the final release-readiness gate and identify blockers before shipping. |
+
+### Example
+
+```text
+/production-pup
+```
+
+Runs the complete audit.
+
+```text
+/production-pup/security
+```
+
+Runs only the security-focused workflow.
+
+```text
+/production-pup/fix
+```
+
+Audits, fixes relevant issues, and verifies the changes.
+
+```text
+/production-pup/report
+```
+
+Creates a report without modifying the project.
+
 ## 🛠️ How to Use
 
-The complete skill lives in `production_ready_website_app_skill_merged.md`.
+The main skill lives in `SKILL.md`. Focused slash-command workflows live under `.claude/commands/production-pup/`.
 
-Give that skill to your AI coding agent or use it as the project's manual pre-launch checklist.
+Give the skill to your AI coding agent or use the slash commands when your agent supports repository command files.
 
 ### For an AI coding agent
 
@@ -95,14 +139,7 @@ Use the skill when asking an agent to:
 - fix accessibility or responsive issues
 - clean up a generated/vibe-coded interface
 
-A useful instruction:
-
-```text
-Use the Production Pup Skill as the quality gate for this project.
-Inspect the existing project first. Do not blindly rewrite the stack.
-Implement the relevant requirements, verify what you can actually test,
-and clearly report anything that remains outstanding.
-```
+The preferred workflow is to invoke the relevant Production Pup command rather than manually pasting a long prompt.
 
 ## 🔍 The Production Standard
 
@@ -160,14 +197,26 @@ Gradients, glassmorphism, giant shadows, generic bento grids, decorative code wi
 - [ ] Claims and business details are real
 - [ ] Production build has been tested
 
-For the full audit, use the [complete skill file](./production_ready_website_app_skill_merged.md).
+For the full audit, use the [complete skill file](./SKILL.md).
 
 ## 📁 Repository Structure
 
 ```text
 Production-skill/
 ├── README.md
+├── SKILL.md
 ├── production_ready_website_app_skill_merged.md
+├── .claude/
+│   └── commands/
+│       └── production-pup/
+│           ├── security.md
+│           ├── seo.md
+│           ├── performance.md
+│           ├── design.md
+│           ├── accessibility.md
+│           ├── fix.md
+│           ├── report.md
+│           └── launch.md
 └── assets/
     └── production-pup-banner.png
 ```
