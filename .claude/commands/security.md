@@ -2,7 +2,7 @@
 
 Run the security-focused Production Pup audit.
 
-Read `SKILL.md` first and use its Security Audit and 54-check Security Verification Matrix as the source of truth.
+Read `SKILL.md` first and use its Security Audit and 70-check Security Verification Matrix as the source of truth.
 
 ## Command
 
@@ -26,26 +26,29 @@ Do not change production data or infrastructure during an audit. Prioritize auth
 Audit and, when requested, fix:
 
 - database credentials, `.env` files, hardcoded secrets, frontend-secret exposure, and secrets in Git history
-- authentication, server-side authorization, admin routes, object-level authorization, IDOR/BOLA, tenant isolation, and user-controlled roles or IDs
-- database permissions and least-privilege database roles
-- input validation, SQL injection, NoSQL injection, XSS, mass assignment, command/OS injection, and unsafe deserialization
+- authentication, MFA for privileged accounts, server-side authorization, admin routes, object-level authorization, IDOR/BOLA, tenant isolation, and user-controlled roles or IDs
+- account enumeration, password reset flows, sessions, JWT validation, cookies, OAuth/OIDC/social login, and CSRF
+- input validation, SQL injection, NoSQL injection, XSS, mass assignment, command/OS injection, unsafe deserialization, and business-logic abuse
+- race conditions, duplicate processing, webhook replay, webhook signatures, and server-side payment/entitlement checks
 - file upload controls, path traversal, SSRF, and unsafe file access
-- password reset flows, sessions, JWT validation, cookies, OAuth/OIDC/social login, and CSRF
-- CORS, HTTPS/TLS, mixed content, security headers, and browser protections
-- rate limits, abuse controls, AI/model endpoints, spend controls, and default credentials
+- CORS, HTTPS/TLS, mixed content, security headers, browser protections, and open redirects
+- rate limits, abuse controls, resource limits, AI/model endpoints, spend controls, and default credentials
 - staging/test environments, debug tools, build logs, verbose errors, sensitive logs, source maps, and public internal dashboards
-- webhook signature verification and server-side payment/entitlement checks
-- dependency vulnerabilities, abandoned packages, malicious packages, and software supply-chain risk
-- prompt injection and AI tool authorization so model actions cannot bypass real user or tenant permissions
+- dependency vulnerabilities, abandoned packages, malicious packages, lockfiles, pinned CI actions, and software supply-chain risk
+- prompt injection, AI sensitive-information disclosure, unsafe AI output handling, and AI tool authorization
+- excessive AI agent agency and confirmation boundaries for consequential actions
 - audit logging, security monitoring, alerting, backup/restore testing, and incident-relevant observability
-- sensitive data protection in transit and at rest
+- least-privilege database access and sensitive data protection in transit and at rest
+- CI/CD credentials, deployment environment protection, third-party build actions/scripts, and fail-closed security behavior
+- sensitive browser storage such as localStorage, IndexedDB, and caches
+- GraphQL, WebSocket, and realtime endpoint authentication, authorization, and abuse limits
 - review of AI-generated code before shipping, especially auth, payments, data, and permission logic
 
 ### Evidence standard
 
 The governing rule is: if you cannot point to the code, setting, configuration, test, or log that proves a guardrail exists, treat it as missing or UNKNOWN rather than assuming it is present.
 
-After fixes, re-test the deployed path where applicable and re-run the audit after major security changes.
+After fixes, re-test the deployed path where applicable and re-run the audit after meaningful changes to authentication, data, infrastructure, dependencies, payments, or AI tools.
 
 Do not claim a system is secure merely because code looks correct. This is an audit workflow, not a penetration test or guarantee.
 
