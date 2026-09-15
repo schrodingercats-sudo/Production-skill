@@ -20,6 +20,8 @@ Use this skill when:
 - preparing a landing page, SaaS product, dashboard, ecommerce site, portfolio, or web app for real users
 - performing a final pre-launch audit
 
+Do not rewrite the existing stack without a concrete reason.
+
 ## 1. Understand the Product First
 
 Before changing anything, determine:
@@ -33,8 +35,6 @@ Before changing anything, determine:
 - accounts, authentication, authorization, payments, or subscriptions
 - applicable privacy and legal requirements
 - intended brand and visual direction
-
-Do not rewrite the existing stack without a concrete reason.
 
 ## 2. Anti-Vibe-Coding Design Audit
 
@@ -83,131 +83,66 @@ Avoid random radii, unrelated shadows, inconsistent buttons, arbitrary colors, m
 
 ## 4. Security Audit
 
-Security is evidence-driven. Do not infer a security control merely because a framework is present or a UI appears correct.
+### Evidence standard
 
-### Evidence rule
+Use an evidence-driven audit. For every relevant security requirement, classify it as:
 
-If you cannot point to the code, configuration, deployment setting, test, or log that proves a relevant guardrail exists, treat it as **UNKNOWN or missing**, not PASS.
+- **PASS**: evidence proves the guardrail exists and works as expected.
+- **FAIL**: evidence shows the guardrail is missing or broken.
+- **UNKNOWN**: the guardrail may exist, but available code, configuration, tests, or logs do not prove it.
+- **NOT APPLICABLE**: the project genuinely does not use the affected feature or risk.
 
-For each applicable check, report one of:
+For every PASS, cite the exact file, configuration, setting, test, or log that proves it. Do not mark PASS from visual inspection alone when runtime evidence is required. For FAIL or UNKNOWN, explain the realistic failure mode, give the smallest safe fix, and state how to verify it.
 
-- **PASS**: evidence proves the control exists and is working as expected.
-- **FAIL**: evidence shows the control is absent or broken.
-- **UNKNOWN**: the control may exist, but available evidence does not prove it.
-- **NOT APPLICABLE**: the application genuinely does not have the affected feature or risk.
-
-For PASS, cite the exact file, setting, configuration, test, or log. For FAIL or UNKNOWN, explain the realistic failure mode, smallest safe fix, and how to verify it. Do not change production data or infrastructure during a read-only audit. After major security changes, re-run the audit and test the deployed path where possible.
-
-Prioritize authentication, authorization, private data, payments, admin access, secrets, AI tools, and spend.
-
-### 54-check security verification matrix
-
-Use the following cumulative matrix as the security deep-check. These are evidence checks, not assumptions. Skip only when genuinely not applicable.
-
-#### Secrets, authentication, authorization, and input
-
-1. **Database credentials exposed**: keep database usernames, passwords, and connection strings server-side; rotate exposed credentials.
-2. **Public environment files**: keep `.env` files and secrets out of Git, public builds, and static hosting; use production secret storage.
-3. **Hardcoded API keys or secrets**: move private credentials to server-side environment variables or a secret manager and rotate leaked values.
-4. **Weak or missing authentication**: use a proven authentication mechanism and require authentication on every resource that is private.
-5. **Missing server-side authorization**: enforce permissions on the server before every sensitive action.
-6. **Cross-user data access**: scope reads and writes to the authenticated user or tenant so changing an identifier cannot expose another user's data.
-7. **Open database permissions**: default to deny and grant only the database reads and writes the application genuinely needs.
-8. **Misconfigured hosted database/storage rules**: inspect Firebase, Supabase, S3, or equivalent rules and test as signed-out and unauthorized users.
-9. **Unprotected admin routes**: enforce admin authorization server-side; hidden UI controls and secret URLs are not access control.
-10. **Production debug tools exposed**: disable or strongly protect debug consoles, test routes, profilers, and internal developer tooling.
-11. **Build logs leak secrets**: mask credentials in CI/CD and ensure scripts do not print tokens, keys, or connection strings.
-12. **Verbose production errors**: return safe generic errors while keeping stack traces, queries, paths, and internal details in protected logs.
-13. **Secrets in Git history**: treat committed secrets as exposed; rotate them and remove historical copies where appropriate.
-14. **Secrets shipped to frontend JavaScript**: anything delivered to the browser is readable by users, so private service credentials must remain server-side.
-15. **Client-only security checks**: repeat validation, authorization, and entitlement checks on trusted server-side code.
-16. **Missing input validation**: validate type, length, format, allowed values, and size for untrusted server-side input.
-17. **SQL injection**: use parameterized queries, prepared statements, or safe ORM bindings instead of concatenating user input into SQL.
-18. **NoSQL injection**: validate object shapes and operators and use safe query APIs so user-controlled objects cannot alter query logic.
-
-#### Web, sessions, APIs, files, and payments
-
-19. **Cross-site scripting**: safely encode untrusted output, sanitize intentionally allowed HTML, and use CSP where appropriate.
-20. **Cross-site request forgery**: use suitable SameSite cookie behavior and framework CSRF protections for browser-authenticated state changes.
-21. **Insecure file uploads**: constrain type and size, generate safe filenames, store safely, and scan risky uploads where appropriate.
-22. **Path traversal**: never trust user-controlled paths or filenames; resolve access against approved base directories.
-23. **Server-side request forgery**: allowlist destinations where practical and block private/internal network ranges.
-24. **Broken password-reset flows**: use short-lived single-use reset tokens and avoid exposing whether an account exists.
-25. **Weak session management**: use strong session identifiers, sensible expiry, rotation, and server-side invalidation on logout or security changes.
-26. **Weak JWT validation**: verify signature, issuer, audience, expiry, and allowed algorithms using strong signing keys.
-27. **Overly permissive CORS**: allow only required origins, methods, headers, and credential combinations.
-28. **Missing rate limits**: apply sensible per-user and per-IP ceilings to login, signup, password reset, APIs, and AI/model routes.
-29. **Unprotected staging or test environments**: authenticate non-production systems and keep production secrets, data, and admin tooling out of them.
-30. **Default credentials remain**: replace vendor defaults before deployment and remove unused default accounts or tokens.
-31. **Webhook signatures not verified**: verify the provider's signature before trusting or processing webhook events.
-32. **Frontend-only payment checks**: determine subscription and entitlement state on the trusted server rather than browser state.
-33. **IDOR/BOLA**: authorize the specific object on every request; possession of an object ID is never sufficient permission.
-34. **APIs trust user-controlled roles or IDs**: derive identity and permissions from trusted authentication context rather than request fields.
-35. **Sensitive data in logs**: redact passwords, tokens, payment data, and unnecessary PII; restrict log access and retention.
-36. **Sensitive source maps or build artifacts**: inspect production output and exclude artifacts that expose secrets or unintended internal implementation details.
-
-#### Dependencies, AI, data, infrastructure, and operations
-
-37. **Vulnerable or abandoned dependencies**: scan dependencies, patch known vulnerabilities, and replace libraries that are no longer maintained.
-38. **Malicious or compromised packages**: minimize dependencies, verify package identity and maintainers, and review suspicious install scripts.
-39. **Prompt injection**: separate trusted instructions from untrusted content and enforce permissions outside the model itself.
-40. **AI tools bypass user permissions**: authorize every tool call using the real user and tenant context before the model can access data or act.
-41. **Excess database privileges**: give the application a least-privilege database role and isolate operations that truly require elevated access.
-42. **Missing audit logs**: record actor, action, target, time, and outcome for sensitive changes so important activity can be reconstructed.
-43. **Missing security monitoring or alerts**: alert on authentication abuse, privilege changes, unusual traffic, webhook failures, critical exceptions, and spend spikes.
-44. **No tested backup and restore plan**: maintain protected backups and prove that restoration works before relying on the backups.
-45. **Public internal dashboards**: protect admin, database, queue, and monitoring dashboards with strong authentication and appropriate network controls.
-46. **Missing security headers**: configure relevant browser protections such as CSP and anti-sniffing headers, then test deployed responses.
-47. **Unsafe cookie settings**: use `HttpOnly`, `Secure`, and an appropriate `SameSite` policy for sensitive cookies based on their actual use.
-48. **Sensitive data unprotected in transit or at rest**: use HTTPS/TLS, provider encryption, and sensible key management for data that needs protection.
-49. **Poor tenant isolation**: include tenant scope in authorization and data access at every layer of multi-user or multi-organization applications.
-50. **Over-trusting AI-generated code**: review diffs, run scanners/tests, and manually inspect authentication, payments, data, and permission logic before shipping.
-51. **Mass assignment / over-posting**: allowlist fields a user may update so hidden fields such as role, balance, or ownership cannot be submitted.
-52. **Command or OS injection**: avoid shell execution where possible; otherwise use safe APIs and strictly validated arguments rather than concatenated commands.
-53. **Unsafe deserialization**: use safe formats and strict schemas/integrity checks; never deserialize attacker-controlled objects with unsafe mechanisms.
-54. **Misconfigured OAuth/OIDC/social login**: restrict redirect URIs and correctly validate state or nonce, issuer, audience, and token integrity.
-
-### Core security areas
-
-#### Secrets
+### Secrets
 
 - Never expose private API keys in browser JavaScript.
 - Keep secrets server-side.
 - Verify environment variables are configured correctly.
+- Ensure server-only variables are not exposed to clients.
 - Search the repository and relevant Git history for keys, tokens, passwords, private keys, database URLs, connection strings, and credentials.
 - If a real secret was committed, treat it as compromised and rotate/revoke it. Deleting the latest copy is not enough.
 
-#### Authentication and authorization
+### Authentication and authorization
 
 - Protect admin routes server-side.
 - Enforce authentication on protected resources.
-- Secure sessions, cookies, tokens, OAuth/OIDC flows, and password recovery.
-- Enforce object-level permissions and tenant boundaries.
-- Never trust client-supplied roles, ownership, IDs, or entitlements.
+- Secure sessions, cookies, and tokens.
+- Enforce object-level permissions so changing an ID cannot expose another user's data.
+- Check for IDOR/BOLA-style access-control issues.
+- Check tenant isolation for multi-user or multi-organization products.
+- Never trust user-controlled role or identity fields in requests.
 
-#### Input and injection
+### Input and injection
 
 - Validate important input server-side.
 - Use schemas and allowlists where appropriate.
 - Prevent XSS with safe output handling and sanitization when rich HTML is necessary.
-- Protect SQL and NoSQL queries from injection.
-- Protect file paths, OS commands, and deserialization boundaries.
+- Use parameterized queries, prepared statements, or a safe ORM.
+- Never concatenate untrusted input into SQL.
+- Validate NoSQL object shapes and operators.
+- Prevent mass assignment by explicitly allowing fields that users may update.
+- Avoid shell execution where possible and strictly validate arguments when it is required.
+- Do not deserialize attacker-controlled objects using unsafe mechanisms.
+- Apply least-privilege database permissions.
 
-#### Abuse protection
+### Abuse protection
 
-Protect login, signup, password reset, public forms, expensive APIs, AI/model endpoints, email sending, webhooks, and other abuse-prone endpoints with appropriate rate limits.
+Protect login, signup, password reset, public forms, expensive APIs, AI/model endpoints, email sending, and other abuse-prone endpoints with appropriate rate limits.
 
 For metered services, set provider-side or application-level spending limits where possible. Do not expose unlimited expensive operations to unauthenticated users.
 
 Use sensible spam protection such as rate limiting, honeypots, bot detection, or CAPTCHA/Turnstile-style systems when justified.
 
-#### File uploads and outbound requests
+Also enforce explicit resource limits for timeouts, quotas, upload sizes, usage ceilings, storage, compute, API calls, and AI spend.
+
+### File uploads and path handling
 
 If uploads exist, validate size and type, do not trust client MIME types or filenames, store files safely, prevent inappropriate executable serving/execution, and consider malware scanning for higher-risk workflows.
 
-If the server fetches user-controlled URLs, review SSRF defenses, destination allowlists, redirect behavior, and access to private/internal network ranges.
+Never trust user-supplied paths or filenames. Resolve file access against approved base directories and prevent path traversal.
 
-#### Browser and transport security
+### Web and transport security
 
 - Protect cookie-authenticated state-changing requests against CSRF.
 - Avoid permissive `*` CORS for private/authenticated APIs.
@@ -216,14 +151,117 @@ If the server fetches user-controlled URLs, review SSRF defenses, destination al
 - Review CSP, HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, and clickjacking protections as appropriate.
 - Use `Secure`, `HttpOnly`, and appropriate `SameSite` cookie settings where applicable.
 - Disable debug mode and prevent production exposure of stack traces, internal paths, secrets, debug endpoints, and development tooling.
+- Restrict open redirects to trusted destinations or validated relative paths.
 
-#### AI and agent security
+### Sessions, identity, and authentication flows
 
-For AI features, treat model output and retrieved/user-provided content as untrusted. Separate system/developer instructions from untrusted content, keep authorization outside the model, and re-check user/tenant permissions before every tool or data-access action.
+- Use short-lived, single-use password-reset tokens and avoid account-existence leaks.
+- Use strong session tokens, sensible expiry, rotation, and server-side invalidation on logout or security changes.
+- Validate JWT signature, issuer, audience, expiry, and allowed algorithms.
+- Restrict OAuth/OIDC redirect URIs and validate state or nonce, issuer, audience, and token integrity.
+- Enable MFA on privileged GitHub, cloud, database, payment, email, and application-admin accounts where supported.
+- Avoid account enumeration through login, signup, or password-reset responses.
 
-Audit model tools for excessive privileges, prompt injection paths, indirect instruction attacks, data leakage, unsafe URL fetching, expensive loops, and missing spend/rate controls.
+### APIs, webhooks, and payments
 
-## 5. Privacy, Cookies, and Tracking
+- Verify webhook signatures before trusting or processing events.
+- Make webhook handlers idempotent and reject duplicate/replayed event IDs.
+- Determine subscriptions and entitlements on the server rather than trusting browser state.
+- Authorize the specific object on every sensitive API request.
+- Derive identity and permissions from trusted server-side authentication context rather than request fields.
+- Secure GraphQL, WebSocket, and realtime endpoints with authentication, per-operation authorization, and abuse/query/message limits.
+
+### Dependencies and supply chain
+
+- Scan dependencies and patch known vulnerabilities.
+- Replace abandoned or unmaintained libraries when appropriate.
+- Minimise dependencies and verify package identity and maintainers.
+- Review suspicious install scripts.
+- Lock dependency versions.
+- Pin sensitive CI actions so upstream changes cannot silently alter a production build.
+
+### AI security
+
+- Separate trusted instructions from untrusted content to reduce prompt-injection risk.
+- Enforce permissions outside the model itself.
+- Authorize every AI tool call with the real user and tenant context.
+- Minimise sensitive information sent to models.
+- Filter retrieval and model output according to actual user permissions.
+- Treat model output as untrusted before using it as HTML, SQL, code, URLs, filenames, or shell commands.
+- Give AI agents the smallest tool scopes possible.
+- Require confirmation for consequential agent actions such as spending, deletion, or other irreversible changes.
+- Review AI-generated diffs, scanners, tests, and especially auth, payment, data, and permission logic before shipping.
+
+### Database, logs, monitoring, and recovery
+
+- Use least-privilege database roles and isolate operations that genuinely need elevated access.
+- Record actor, action, target, time, and outcome for sensitive changes where auditability is required.
+- Redact passwords, tokens, payment data, and unnecessary PII from logs.
+- Alert on auth abuse, privilege changes, unusual traffic, webhook failures, critical exceptions, and spend spikes where appropriate.
+- Test protected backups and prove that restoration works before relying on the backup plan.
+- Keep admin, database, queue, and monitoring dashboards behind strong authentication and appropriate network controls.
+- Protect sensitive data in transit and at rest using HTTPS/TLS, provider encryption, and sensible key management where needed.
+
+### CI/CD and failure behavior
+
+- Scope CI/CD tokens and protect deployment environments.
+- Prefer short-lived production credentials.
+- Review third-party CI actions and build scripts because they can read secrets or modify shipped software.
+- Default security, auth, payment, and permission checks to deny when dependencies fail rather than accidentally granting access.
+
+## 5. Security Verification Matrix: Checks 55-70
+
+These checks extend the earlier 1-54 security coverage with logic, CI/CD, resource, AI-agent, browser-storage, redirect, and realtime risks.
+
+55. **No MFA on privileged accounts**
+    - Verify MFA is enabled on privileged GitHub, cloud, database, payment, email, and application-admin accounts where supported.
+
+56. **Account enumeration**
+    - Verify login, signup, and reset flows do not unnecessarily reveal whether an account exists.
+
+57. **Business-logic abuse**
+    - Verify prices, credits, trials, limits, permissions, and valid state transitions are enforced on the server, including unusual sequences and values.
+
+58. **Race conditions**
+    - Verify transactions, locking, uniqueness constraints, or idempotency prevent simultaneous requests from producing duplicate or invalid outcomes.
+
+59. **Webhook replay / duplicate processing**
+    - Verify processed event IDs are tracked and webhook handlers are safe to retry without performing the action twice.
+
+60. **Overpowered CI/CD credentials**
+    - Verify pipeline tokens are scoped, deployment environments are protected, and short-lived credentials are preferred for production access.
+
+61. **Untrusted build actions or scripts**
+    - Review third-party CI actions and build scripts for access to secrets and ability to modify shipped software.
+
+62. **Unpinned build dependencies**
+    - Verify dependency versions are locked and sensitive CI actions are pinned.
+
+63. **Security checks fail open**
+    - Verify auth, payment, and permission failures default to deny rather than accidentally granting access.
+
+64. **Missing resource limits**
+    - Verify timeouts, quotas, upload limits, and usage ceilings prevent exhaustion of compute, storage, APIs, and AI spend.
+
+65. **AI sensitive-information disclosure**
+    - Verify only necessary data reaches the model and retrieval/output is filtered according to real user permissions.
+
+66. **Unsafe use of AI output**
+    - Verify model output is treated as untrusted before it is used as HTML, SQL, code, URLs, filenames, or shell commands.
+
+67. **AI agents have excessive agency**
+    - Verify agents have the smallest practical tool scopes and consequential actions such as spending or deletion require confirmation where appropriate.
+
+68. **Sensitive browser storage**
+    - Verify long-lived secrets and unnecessary PII are not stored in localStorage, IndexedDB, or browser caches; prefer safer session patterns.
+
+69. **Open redirects**
+    - Verify redirect destinations are allowlisted or validated as safe relative paths.
+
+70. **Unsecured GraphQL / WebSocket / realtime endpoints**
+    - Verify connections are authenticated, every operation is authorized, and query/message abuse is limited.
+
+## 6. Privacy, Cookies, and Tracking
 
 - Provide an accurate Privacy Policy when required.
 - Provide Terms of Service/Conditions when required.
@@ -235,7 +273,7 @@ Audit model tools for excessive privileges, prompt injection paths, indirect ins
 
 Never invent legal compliance or use fake legal text.
 
-## 6. SEO and Discoverability
+## 7. SEO and Discoverability
 
 For public sites, audit:
 
@@ -280,7 +318,7 @@ Watch for hidden launch problems such as:
 
 Do not automatically block AI crawlers. The correct policy depends on the site's goals, privacy requirements, licensing concerns, and content strategy.
 
-## 7. Performance and Scalability Audit
+## 8. Performance and Scalability Audit
 
 Performance is not only about page load. Audit frontend rendering, assets, APIs, databases, caching, infrastructure, and scaling bottlenecks together.
 
@@ -342,15 +380,17 @@ Actively look for N+1 queries, unnecessary re-renders, unused dependencies, unbo
 
 Optimize actual bottlenecks rather than adding infrastructure because it is fashionable.
 
-## 8. Mobile and Responsive UX
+## 9. Mobile and Responsive UX
 
 Test real small-screen layouts.
 
-Check navigation, forms, buttons, text wrapping, images, cards, tables, modals, dialogs, horizontal overflow, touch targets, sticky/fixed elements, keyboard behavior, mobile inputs, mobile menus, and orientation changes where relevant.
+Check navigation, forms, buttons, text wrapping, images, cards, tables, modals, dialogs, horizontal overflow, touch targets, sticky/fixed elements, keyboard behavior, mobile inputs, mobile menus, orientation changes, and overall mobile optimization where relevant.
+
+Specifically check for horizontal scroll and mobile overflow rather than assuming responsive CSS is correct.
 
 A desktop-only site is not finished.
 
-## 9. Accessibility
+## 10. Accessibility
 
 Check:
 
@@ -373,7 +413,7 @@ Check:
 
 Avoid vague controls such as "Click here" and unlabeled icon-only buttons.
 
-## 10. Forms and Validation
+## 11. Forms and Validation
 
 Test important forms with empty submissions, invalid formats, excessively long input, unexpected characters, duplicate submissions, network failures, server errors, successful submissions, keyboard navigation, mobile input, and spam/abuse cases.
 
@@ -381,15 +421,18 @@ Also verify useful UX patterns where relevant:
 
 - password visibility toggle
 - clear inline errors
-- success/confirmation states
+- useful success messages after completed actions
+- useful error messages after failed actions
 - loading/disabled state during submission
 - prevention of accidental double submission
 - newsletter/contact confirmation
 - copy-to-clipboard feedback
+- no placeholder text left in shipped UI
+- no unused navigation items
 
 Client-side validation improves UX. Server-side validation is the security boundary. Use both.
 
-## 11. Product Demonstration
+## 12. Product Demonstration
 
 If the site sells, explains, or promotes a real product, demonstrate the actual product.
 
@@ -397,7 +440,7 @@ Prefer real screenshots, realistic UI states, meaningful flows, interactive demo
 
 Do not substitute fake terminal windows, decorative dashboards, invented metrics, or fake testimonials for a real product demonstration.
 
-## 12. Copywriting and Content Quality Audit
+## 13. Copywriting and Content Quality Audit
 
 Treat copy as part of product quality. The site should be easy to understand quickly and should sound like a real product, not generated filler.
 
@@ -446,13 +489,15 @@ Never invent customers, testimonials, reviews, ratings, user counts, revenue, ca
 
 If a claim cannot be substantiated, remove it or rewrite it as an accurate non-quantified statement.
 
-## 13. Content, Claims, and Trust
+## 14. Content, Claims, and Trust
 
 Use real business/contact information where required. Check licenses and rights for images, icons, fonts, videos, and other assets.
 
 Never claim that a site is "100% secure," "fully compliant," "best in the world," or similar unless the claim is genuinely supportable and appropriately qualified.
 
-## 14. Interaction and Polish
+Also verify that visible contact information behaves like contact information: phone numbers should be clickable on supported devices, email addresses should use appropriate mail links, and important branding/logos should navigate to the intended home or primary page when users reasonably expect that behavior.
+
+## 15. Interaction and Polish
 
 Verify useful production details where relevant:
 
@@ -461,6 +506,9 @@ Verify useful production details where relevant:
 - dark-mode toggle actually persists and does not flash badly on load
 - hover states exist where they improve desktop usability but are not required for touch devices
 - focus states remain visible
+- buttons actually perform their promised actions and broken buttons are fixed
+- important actions expose useful success messages
+- failures expose useful error messages without leaking internals
 - expandable FAQs work and are accessible
 - back-to-top controls appear only when useful
 - scroll progress indicators reflect actual page position
@@ -470,10 +518,15 @@ Verify useful production details where relevant:
 - destructive actions have appropriate confirmation/protection
 - loading animations do not block usable content
 - error and empty states tell the user what to do next
+- no placeholder copy remains in production UI
+- unused navigation items are removed or made functional
+- the site logo is clickable when it functions as the primary home navigation
+- phone numbers are clickable where appropriate
+- email addresses are clickable where appropriate
 
 Do not add interactions just to make a page feel animated.
 
-## 15. Technical Production Cleanup
+## 16. Technical Production Cleanup
 
 Before shipping:
 
@@ -484,14 +537,17 @@ Before shipping:
 - remove placeholder copy
 - remove development-only UI and tooling
 - remove unnecessary dependencies
+- remove unused navigation items
+- remove unused assets/images where they are genuinely dead code
 - review production source maps and debug artifacts
 - verify environment-specific configuration
 - verify error handling
 - verify deployment configuration
 - verify the production URL is used consistently in metadata and links
 - check that preview/development URLs are not unintentionally exposed
+- compress and appropriately size images
 
-## 16. Navigation and UX
+## 17. Navigation and UX
 
 Verify that:
 
@@ -500,26 +556,38 @@ Verify that:
 - active states make sense
 - buttons actually perform their promised actions
 - links do not lead to dead ends
+- broken links are fixed
+- footer links work
 - destructive actions are clear and appropriately protected
 - success and error feedback is understandable
 - users can recover from mistakes
 - empty states explain what to do next
 - internal links create sensible paths through the product
+- the primary logo behaves as an expected home link where appropriate
+- phone and email contact details are actionable on supported devices
+- mobile navigation is usable and does not create horizontal overflow
 
-## 17. Final Pre-Launch Gate
+## 18. Final Pre-Launch Gate
 
 Before declaring the project ready, verify as applicable:
 
 - [ ] Core functionality works
 - [ ] Authentication and permissions are correct
-- [ ] All applicable security matrix checks are PASS or explicitly resolved as N/A/provider handled
-- [ ] Secrets are protected and Git history has been reviewed
-- [ ] Inputs, APIs, webhooks, files, and outbound requests are protected
-- [ ] Abuse/rate limits and AI spend controls are considered
-- [ ] Dependency and supply-chain risk is reviewed
-- [ ] AI prompt/tool authorization is reviewed where AI exists
-- [ ] Audit logs, monitoring, and alerting exist where required
-- [ ] Backup and restore have been tested where data requires recovery
+- [ ] Secrets are protected
+- [ ] Inputs and APIs are protected
+- [ ] Abuse/rate limits are considered
+- [ ] MFA protects privileged accounts where supported
+- [ ] Business logic and state transitions are enforced server-side
+- [ ] Race conditions and duplicate processing are addressed where relevant
+- [ ] CI/CD credentials and actions are scoped and reviewed
+- [ ] Dependency versions and sensitive CI actions are pinned
+- [ ] Security checks fail closed
+- [ ] Resource limits are configured where needed
+- [ ] AI data exposure and output handling are controlled
+- [ ] AI agent tool scopes are minimal and consequential actions are protected
+- [ ] Sensitive browser storage is avoided
+- [ ] Redirect destinations are controlled
+- [ ] GraphQL/WebSocket/realtime endpoints are secured where used
 - [ ] HTTPS and browser security are configured
 - [ ] Privacy/legal requirements are addressed
 - [ ] SEO basics are complete
@@ -531,8 +599,13 @@ Before declaring the project ready, verify as applicable:
 - [ ] Favicon and social metadata exist
 - [ ] 404 and error states work
 - [ ] Forms are validated
+- [ ] Success and error messages are useful
 - [ ] Accessibility basics pass
 - [ ] Mobile layouts and menus work
+- [ ] Horizontal overflow is absent unless intentionally designed
+- [ ] Phone and email links are actionable where appropriate
+- [ ] Logo/home navigation behaves correctly
+- [ ] Placeholder text and unused navigation are removed
 - [ ] Images/assets are optimized
 - [ ] Loading/empty/error states exist
 - [ ] API and database performance are reviewed
@@ -554,17 +627,20 @@ Before declaring the project ready, verify as applicable:
 - [ ] Production build succeeds
 - [ ] Real product content is present
 
-## 18. How to Report the Audit
+## 19. How to Report the Audit
 
 For each applicable area, classify the result as one of:
 
+- **PASS**: evidence proves the guardrail exists and works as expected.
+- **FAIL**: evidence shows the guardrail is missing or broken.
+- **UNKNOWN**: the guardrail may exist, but available evidence does not prove it.
+- **NOT APPLICABLE**: the project genuinely does not use the affected feature or risk.
 - **Implemented**: the requirement exists in the project.
 - **Verified**: the requirement was tested or inspected successfully.
 - **Provider handled**: responsibility belongs to the hosting/service provider and is not directly controllable in the codebase.
-- **Not applicable**: the project genuinely does not need it.
 - **Outstanding**: the requirement is missing, broken, or cannot yet be verified.
 
-For security checks, prefer the more explicit PASS/FAIL/UNKNOWN/NOT APPLICABLE evidence status and include the exact supporting artifact.
+Use PASS/FAIL/UNKNOWN/NOT APPLICABLE for the 70-check security matrix. Use the broader Implemented/Verified/Provider handled/Not applicable/Outstanding statuses for the overall production-readiness report when useful.
 
 Do not claim something is secure, compliant, accessible, performant, or production-ready merely because the code looks correct. State what was actually checked and what remains uncertain.
 
@@ -573,3 +649,5 @@ Do not claim something is secure, compliant, accessible, performant, or producti
 The goal is not to make every website look the same.
 
 The goal is to make every shipped website feel **intentional, honest, usable, secure, accessible, technically clean, performant, scalable where needed, clear in its messaging, and ready for real users**.
+
+**If you cannot verify it, don't call it production-ready.**
