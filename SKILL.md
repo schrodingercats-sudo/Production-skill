@@ -83,45 +83,131 @@ Avoid random radii, unrelated shadows, inconsistent buttons, arbitrary colors, m
 
 ## 4. Security Audit
 
-### Secrets
+Security is evidence-driven. Do not infer a security control merely because a framework is present or a UI appears correct.
+
+### Evidence rule
+
+If you cannot point to the code, configuration, deployment setting, test, or log that proves a relevant guardrail exists, treat it as **UNKNOWN or missing**, not PASS.
+
+For each applicable check, report one of:
+
+- **PASS**: evidence proves the control exists and is working as expected.
+- **FAIL**: evidence shows the control is absent or broken.
+- **UNKNOWN**: the control may exist, but available evidence does not prove it.
+- **NOT APPLICABLE**: the application genuinely does not have the affected feature or risk.
+
+For PASS, cite the exact file, setting, configuration, test, or log. For FAIL or UNKNOWN, explain the realistic failure mode, smallest safe fix, and how to verify it. Do not change production data or infrastructure during a read-only audit. After major security changes, re-run the audit and test the deployed path where possible.
+
+Prioritize authentication, authorization, private data, payments, admin access, secrets, AI tools, and spend.
+
+### 54-check security verification matrix
+
+Use the following cumulative matrix as the security deep-check. These are evidence checks, not assumptions. Skip only when genuinely not applicable.
+
+#### Secrets, authentication, authorization, and input
+
+1. **Database credentials exposed**: keep database usernames, passwords, and connection strings server-side; rotate exposed credentials.
+2. **Public environment files**: keep `.env` files and secrets out of Git, public builds, and static hosting; use production secret storage.
+3. **Hardcoded API keys or secrets**: move private credentials to server-side environment variables or a secret manager and rotate leaked values.
+4. **Weak or missing authentication**: use a proven authentication mechanism and require authentication on every resource that is private.
+5. **Missing server-side authorization**: enforce permissions on the server before every sensitive action.
+6. **Cross-user data access**: scope reads and writes to the authenticated user or tenant so changing an identifier cannot expose another user's data.
+7. **Open database permissions**: default to deny and grant only the database reads and writes the application genuinely needs.
+8. **Misconfigured hosted database/storage rules**: inspect Firebase, Supabase, S3, or equivalent rules and test as signed-out and unauthorized users.
+9. **Unprotected admin routes**: enforce admin authorization server-side; hidden UI controls and secret URLs are not access control.
+10. **Production debug tools exposed**: disable or strongly protect debug consoles, test routes, profilers, and internal developer tooling.
+11. **Build logs leak secrets**: mask credentials in CI/CD and ensure scripts do not print tokens, keys, or connection strings.
+12. **Verbose production errors**: return safe generic errors while keeping stack traces, queries, paths, and internal details in protected logs.
+13. **Secrets in Git history**: treat committed secrets as exposed; rotate them and remove historical copies where appropriate.
+14. **Secrets shipped to frontend JavaScript**: anything delivered to the browser is readable by users, so private service credentials must remain server-side.
+15. **Client-only security checks**: repeat validation, authorization, and entitlement checks on trusted server-side code.
+16. **Missing input validation**: validate type, length, format, allowed values, and size for untrusted server-side input.
+17. **SQL injection**: use parameterized queries, prepared statements, or safe ORM bindings instead of concatenating user input into SQL.
+18. **NoSQL injection**: validate object shapes and operators and use safe query APIs so user-controlled objects cannot alter query logic.
+
+#### Web, sessions, APIs, files, and payments
+
+19. **Cross-site scripting**: safely encode untrusted output, sanitize intentionally allowed HTML, and use CSP where appropriate.
+20. **Cross-site request forgery**: use suitable SameSite cookie behavior and framework CSRF protections for browser-authenticated state changes.
+21. **Insecure file uploads**: constrain type and size, generate safe filenames, store safely, and scan risky uploads where appropriate.
+22. **Path traversal**: never trust user-controlled paths or filenames; resolve access against approved base directories.
+23. **Server-side request forgery**: allowlist destinations where practical and block private/internal network ranges.
+24. **Broken password-reset flows**: use short-lived single-use reset tokens and avoid exposing whether an account exists.
+25. **Weak session management**: use strong session identifiers, sensible expiry, rotation, and server-side invalidation on logout or security changes.
+26. **Weak JWT validation**: verify signature, issuer, audience, expiry, and allowed algorithms using strong signing keys.
+27. **Overly permissive CORS**: allow only required origins, methods, headers, and credential combinations.
+28. **Missing rate limits**: apply sensible per-user and per-IP ceilings to login, signup, password reset, APIs, and AI/model routes.
+29. **Unprotected staging or test environments**: authenticate non-production systems and keep production secrets, data, and admin tooling out of them.
+30. **Default credentials remain**: replace vendor defaults before deployment and remove unused default accounts or tokens.
+31. **Webhook signatures not verified**: verify the provider's signature before trusting or processing webhook events.
+32. **Frontend-only payment checks**: determine subscription and entitlement state on the trusted server rather than browser state.
+33. **IDOR/BOLA**: authorize the specific object on every request; possession of an object ID is never sufficient permission.
+34. **APIs trust user-controlled roles or IDs**: derive identity and permissions from trusted authentication context rather than request fields.
+35. **Sensitive data in logs**: redact passwords, tokens, payment data, and unnecessary PII; restrict log access and retention.
+36. **Sensitive source maps or build artifacts**: inspect production output and exclude artifacts that expose secrets or unintended internal implementation details.
+
+#### Dependencies, AI, data, infrastructure, and operations
+
+37. **Vulnerable or abandoned dependencies**: scan dependencies, patch known vulnerabilities, and replace libraries that are no longer maintained.
+38. **Malicious or compromised packages**: minimize dependencies, verify package identity and maintainers, and review suspicious install scripts.
+39. **Prompt injection**: separate trusted instructions from untrusted content and enforce permissions outside the model itself.
+40. **AI tools bypass user permissions**: authorize every tool call using the real user and tenant context before the model can access data or act.
+41. **Excess database privileges**: give the application a least-privilege database role and isolate operations that truly require elevated access.
+42. **Missing audit logs**: record actor, action, target, time, and outcome for sensitive changes so important activity can be reconstructed.
+43. **Missing security monitoring or alerts**: alert on authentication abuse, privilege changes, unusual traffic, webhook failures, critical exceptions, and spend spikes.
+44. **No tested backup and restore plan**: maintain protected backups and prove that restoration works before relying on the backups.
+45. **Public internal dashboards**: protect admin, database, queue, and monitoring dashboards with strong authentication and appropriate network controls.
+46. **Missing security headers**: configure relevant browser protections such as CSP and anti-sniffing headers, then test deployed responses.
+47. **Unsafe cookie settings**: use `HttpOnly`, `Secure`, and an appropriate `SameSite` policy for sensitive cookies based on their actual use.
+48. **Sensitive data unprotected in transit or at rest**: use HTTPS/TLS, provider encryption, and sensible key management for data that needs protection.
+49. **Poor tenant isolation**: include tenant scope in authorization and data access at every layer of multi-user or multi-organization applications.
+50. **Over-trusting AI-generated code**: review diffs, run scanners/tests, and manually inspect authentication, payments, data, and permission logic before shipping.
+51. **Mass assignment / over-posting**: allowlist fields a user may update so hidden fields such as role, balance, or ownership cannot be submitted.
+52. **Command or OS injection**: avoid shell execution where possible; otherwise use safe APIs and strictly validated arguments rather than concatenated commands.
+53. **Unsafe deserialization**: use safe formats and strict schemas/integrity checks; never deserialize attacker-controlled objects with unsafe mechanisms.
+54. **Misconfigured OAuth/OIDC/social login**: restrict redirect URIs and correctly validate state or nonce, issuer, audience, and token integrity.
+
+### Core security areas
+
+#### Secrets
 
 - Never expose private API keys in browser JavaScript.
 - Keep secrets server-side.
 - Verify environment variables are configured correctly.
-- Ensure server-only variables are not exposed to clients.
 - Search the repository and relevant Git history for keys, tokens, passwords, private keys, database URLs, connection strings, and credentials.
 - If a real secret was committed, treat it as compromised and rotate/revoke it. Deleting the latest copy is not enough.
 
-### Authentication and authorization
+#### Authentication and authorization
 
 - Protect admin routes server-side.
 - Enforce authentication on protected resources.
-- Secure sessions, cookies, and tokens.
-- Enforce object-level permissions so changing an ID cannot expose another user's data.
-- Check for IDOR/BOLA-style access-control issues.
+- Secure sessions, cookies, tokens, OAuth/OIDC flows, and password recovery.
+- Enforce object-level permissions and tenant boundaries.
+- Never trust client-supplied roles, ownership, IDs, or entitlements.
 
-### Input and injection
+#### Input and injection
 
 - Validate important input server-side.
 - Use schemas and allowlists where appropriate.
 - Prevent XSS with safe output handling and sanitization when rich HTML is necessary.
-- Use parameterized queries, prepared statements, or a safe ORM.
-- Never concatenate untrusted input into SQL.
-- Apply least-privilege database permissions.
+- Protect SQL and NoSQL queries from injection.
+- Protect file paths, OS commands, and deserialization boundaries.
 
-### Abuse protection
+#### Abuse protection
 
-Protect login, signup, password reset, public forms, expensive APIs, AI/model endpoints, email sending, and other abuse-prone endpoints with appropriate rate limits.
+Protect login, signup, password reset, public forms, expensive APIs, AI/model endpoints, email sending, webhooks, and other abuse-prone endpoints with appropriate rate limits.
 
 For metered services, set provider-side or application-level spending limits where possible. Do not expose unlimited expensive operations to unauthenticated users.
 
 Use sensible spam protection such as rate limiting, honeypots, bot detection, or CAPTCHA/Turnstile-style systems when justified.
 
-### File uploads
+#### File uploads and outbound requests
 
 If uploads exist, validate size and type, do not trust client MIME types or filenames, store files safely, prevent inappropriate executable serving/execution, and consider malware scanning for higher-risk workflows.
 
-### Browser and transport security
+If the server fetches user-controlled URLs, review SSRF defenses, destination allowlists, redirect behavior, and access to private/internal network ranges.
+
+#### Browser and transport security
 
 - Protect cookie-authenticated state-changing requests against CSRF.
 - Avoid permissive `*` CORS for private/authenticated APIs.
@@ -130,6 +216,12 @@ If uploads exist, validate size and type, do not trust client MIME types or file
 - Review CSP, HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, and clickjacking protections as appropriate.
 - Use `Secure`, `HttpOnly`, and appropriate `SameSite` cookie settings where applicable.
 - Disable debug mode and prevent production exposure of stack traces, internal paths, secrets, debug endpoints, and development tooling.
+
+#### AI and agent security
+
+For AI features, treat model output and retrieved/user-provided content as untrusted. Separate system/developer instructions from untrusted content, keep authorization outside the model, and re-check user/tenant permissions before every tool or data-access action.
+
+Audit model tools for excessive privileges, prompt injection paths, indirect instruction attacks, data leakage, unsafe URL fetching, expensive loops, and missing spend/rate controls.
 
 ## 5. Privacy, Cookies, and Tracking
 
@@ -420,9 +512,14 @@ Before declaring the project ready, verify as applicable:
 
 - [ ] Core functionality works
 - [ ] Authentication and permissions are correct
-- [ ] Secrets are protected
-- [ ] Inputs and APIs are protected
-- [ ] Abuse/rate limits are considered
+- [ ] All applicable security matrix checks are PASS or explicitly resolved as N/A/provider handled
+- [ ] Secrets are protected and Git history has been reviewed
+- [ ] Inputs, APIs, webhooks, files, and outbound requests are protected
+- [ ] Abuse/rate limits and AI spend controls are considered
+- [ ] Dependency and supply-chain risk is reviewed
+- [ ] AI prompt/tool authorization is reviewed where AI exists
+- [ ] Audit logs, monitoring, and alerting exist where required
+- [ ] Backup and restore have been tested where data requires recovery
 - [ ] HTTPS and browser security are configured
 - [ ] Privacy/legal requirements are addressed
 - [ ] SEO basics are complete
@@ -466,6 +563,8 @@ For each applicable area, classify the result as one of:
 - **Provider handled**: responsibility belongs to the hosting/service provider and is not directly controllable in the codebase.
 - **Not applicable**: the project genuinely does not need it.
 - **Outstanding**: the requirement is missing, broken, or cannot yet be verified.
+
+For security checks, prefer the more explicit PASS/FAIL/UNKNOWN/NOT APPLICABLE evidence status and include the exact supporting artifact.
 
 Do not claim something is secure, compliant, accessible, performant, or production-ready merely because the code looks correct. State what was actually checked and what remains uncertain.
 
