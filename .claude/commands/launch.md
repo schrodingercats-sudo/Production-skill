@@ -4,6 +4,8 @@ Run the final pre-launch Production Pup gate.
 
 Read `SKILL.md` first and use its Final Pre-Launch Gate, 70-check Security Verification Matrix, and audit-reporting rules as the source of truth.
 
+Also apply `references/design-quality.md` for final UI correctness and interaction polish.
+
 ## Command
 
 `/launch`
@@ -36,6 +38,18 @@ Perform a complete release-readiness check covering:
 - clickable phone numbers and email addresses where appropriate
 - no placeholder text or unused navigation
 - accessibility
+- button text/icon contrast in every important state
+- overlapping buttons and CTA groups
+- pointer-event/hit-target collisions
+- responsive flex/grid wrapping and breakpoint collisions
+- navigation, modal, dropdown, tooltip, and overlay collisions
+- meaningful hover/focus/active/loading/success/error states
+- icon consistency and accessible names for icon-only controls
+- no emoji UI icons
+- no new Lucide/lucide-react UI icons
+- purposeful micro-interactions
+- reduced-motion behavior
+- animation performance and restraint
 - mobile layouts, mobile menus, horizontal-overflow checks, and overall mobile optimization
 - optimized and appropriately sized images
 - loading, empty, success, and error states
