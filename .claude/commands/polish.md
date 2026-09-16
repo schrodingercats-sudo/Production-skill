@@ -1,14 +1,20 @@
 # Production Pup: Polish
 
-Run the video-derived website polish audit.
+Run the focused website polish, interaction-correctness, and micro-animation audit.
 
-Read `SKILL.md` first, then read `references/video-polish-checks.md` and use both as the source of truth.
+Read `SKILL.md` first, then read:
+- `references/video-polish-checks.md`
+- `references/design-quality.md`
+
+Use both references as the source of truth for this workflow.
 
 ## Command
 
 `/polish`
 
-Check and, when requested, fix the 20 video-derived production details:
+## Video-derived production checks
+
+Check and, when requested, fix the 20 video-derived details:
 
 - horizontal scroll and mobile overflow
 - broken links and footer links
@@ -28,5 +34,61 @@ Check and, when requested, fix the 20 video-derived production details:
 - overall mobile optimization
 
 Test real interactions where possible. Do not mark a check PASS merely because the UI looks correct.
+
+## UI correctness checks
+
+Also inspect and, when requested, fix:
+
+- button text/background contrast
+- button icon/background contrast
+- hover, focus, active, disabled, loading, success, and error states
+- overlapping buttons and CTA groups
+- hidden controls underneath visible controls
+- pointer-event collisions
+- flex/grid spacing and wrapping
+- unsafe negative margins or absolute positioning
+- responsive breakpoint collisions
+- navigation and menu collisions
+- modal/dropdown/tooltip stacking problems
+- inconsistent iconography
+- emoji used as UI icons
+- Lucide/lucide-react used for new UI icons
+- missing accessible names for icon-only controls
+- inconsistent icon sizing and optical weight
+- missing meaningful micro-interactions
+- excessive/decorative animation
+- reduced-motion support
+- animation performance
+- inconsistent timing/easing
+- loading/success/error feedback
+- overall interaction polish and perceived craftsmanship
+
+## Animation guidance
+
+For React projects, prefer Motion when appropriate, using the current `motion` package and `motion/react` imports. Use it for purposeful hover, tap, focus, in-view, layout, enter/exit, and gesture interactions. Use CSS transitions when a simple effect is clearer and lighter. Do not stack animation libraries without a concrete reason.
+
+Do not add animation merely to make the site look busy. Motion should communicate state, hierarchy, continuity, or feedback.
+
+## Icon guidance
+
+Do not use emoji characters as UI icons.
+
+Do not introduce Lucide/lucide-react for new UI icons. Prefer one deliberate icon family such as Phosphor, Radix Icons, Heroicons, Tabler, or a project-specific/custom SVG system. Keep icon weight and sizing consistent.
+
+## Verification
+
+After fixes:
+
+1. Test important controls at desktop and narrow mobile widths.
+2. Hover and focus button groups.
+3. Tab through interactive elements.
+4. Verify separate clickable hit areas.
+5. Test menus, overlays, dialogs, and dropdowns.
+6. Check for horizontal overflow and breakpoint collisions.
+7. Test reduced-motion behavior.
+8. Check the browser console.
+9. Re-run the relevant build/tests.
+
+Never solve a structural overlap bug by adding arbitrary z-index values unless the stacking context is actually intentional.
 
 Arguments: $ARGUMENTS
