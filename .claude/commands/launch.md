@@ -4,7 +4,11 @@ Run the final pre-launch Production Pup gate.
 
 Read `SKILL.md` first and use its Final Pre-Launch Gate, 70-check Security Verification Matrix, and audit-reporting rules as the source of truth.
 
-Also apply `references/design-quality.md` for final UI correctness and interaction polish.
+Also apply:
+- `references/design-quality.md`
+- `references/privacy-legal-readiness.md`
+- `references/trust-conversion-seo.md`
+- `references/security-operational-hardening.md`
 
 ## Command
 
@@ -23,9 +27,12 @@ Perform a complete release-readiness check covering:
 - file uploads, path traversal, SSRF, and open redirects
 - HTTPS/TLS, cookies, CORS, security headers, and browser storage
 - dependencies, lockfiles, CI/CD credentials, build actions, and pinned sensitive actions
+- `SECURITY DEFINER` functions, private-response caching, DNS integrity, third-party script integrity, resource-ID enumeration, and sensitive log redaction
 - audit logs, monitoring/alerts, backups/restores, and internal dashboards
+- provider/operator evidence for backup restore tests, billing/spend alerts, registrar/DNS 2FA and transfer lock, CAA records, dangling DNS, WAF, restricted admin access, canary detection, and independent security review
 - GraphQL/WebSocket/realtime security where used
-- privacy and legal requirements
+- privacy and legal readiness using `references/privacy-legal-readiness.md`
+- actual data collection, consent, cookie/tracking behavior, third-party SDKs, deletion/retention behavior, claims, pricing/fees, licensing, accessibility, and contact details
 - SEO basics
 - unique page titles and useful meta descriptions
 - sensible H1/heading structure and canonical URLs
@@ -33,6 +40,8 @@ Perform a complete release-readiness check covering:
 - favicon and social metadata
 - 404 and error states
 - broken links and footer links
+- trust/conversion details including clear CTAs, short forms, FAQs, service/product pages, real case studies, booking/confirmation flows, visible contact details, and legitimate response-time promises where applicable
+- local SEO checks where the project is location-based, without inventing locations or backlinks
 - form validation, success messages, error messages, and duplicate-submission handling
 - clickable logo/home navigation where appropriate
 - clickable phone numbers and email addresses where appropriate
@@ -67,6 +76,6 @@ Perform a complete release-readiness check covering:
 - real content and claims
 - successful production build
 
-Do not declare the project ready if critical items are outstanding or unverifiable. Produce a concise release report with evidence, blockers, UNKNOWN items, and recommended next actions.
+Do not declare the project ready if critical items are outstanding or unverifiable. Produce a concise release report with evidence, blockers, UNKNOWN/provider-evidence items, and recommended next actions.
 
 Arguments: $ARGUMENTS
