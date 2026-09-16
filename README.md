@@ -26,7 +26,7 @@
 
 **Production Pup** is a reusable skill for AI coding agents and developers who want to take a website or web app beyond "it works."
 
-It acts as a **pre-launch quality gate** covering security, privacy, SEO, accessibility, performance, responsive behavior, production cleanup, trustworthy content, and intentional design.
+It acts as a **pre-launch quality gate** covering security, privacy/legal readiness, SEO, accessibility, performance, responsive behavior, production cleanup, trustworthy content, conversion details, and intentional design.
 
 > **Don't ship a demo when you meant to ship a product.**
 
@@ -37,42 +37,25 @@ The skill is deliberately skeptical. It does not treat a checklist as proof that
 | Area | What Production Pup looks for |
 | --- | --- |
 | **Product understanding** | Goals, users, routes, data, integrations, auth, privacy, and product-specific requirements before implementation. |
-| **Design quality** | Intentional visual systems, typography, spacing, color, motion, hierarchy, and protection against generic AI/vibe-coded UI. |
+| **Design quality** | Intentional visual systems, typography, spacing, color, motion, hierarchy, button correctness, collision-free layouts, and protection against generic AI/vibe-coded UI. |
 | **Security** | Evidence-driven **70-check** coverage across secrets, auth, MFA, authorization, injection, business logic, race conditions, sessions, APIs, payments, files, AI security, CI/CD, browser security, redirects, realtime endpoints, and more. |
-| **Privacy** | Privacy policies, terms, cookies, consent, analytics, tracking, third-party embeds, and data minimization. |
-| **SEO** | Titles, descriptions, headings, canonicals, sitemap, robots, structured data, social previews, favicon, 404 pages, and broken links. |
+| **Security operations** | Backup/restore evidence, billing/spend alerts, registrar/DNS security, CAA and dangling-DNS checks, WAF/restricted admin access, canary detection, and independent security review evidence. |
+| **Privacy & legal readiness** | Privacy/terms/refund/cookie disclosures, consent, data minimization, SDK review, dark-pattern checks, claims, accessibility, licensing, marketing opt-out, and deletion workflows. |
+| **SEO & local discoverability** | Titles, descriptions, headings, canonicals, sitemap, robots, structured data, social previews, favicon, 404 pages, internal links, Search Console, local signals, image delivery, and legitimate backlink strategy. |
+| **Trust & conversion** | Clear CTAs, short forms, pricing clarity, FAQs, service/product pages, real case studies, booking flows, confirmation states, response-time promises only when true, and visible contact details. |
 | **Performance** | Image optimization, bundle size, loading states, API latency, layout stability, caching, database queries, pagination, and production-build performance. |
 | **Responsive UX** | Mobile layouts, navigation, forms, tables, dialogs, touch targets, overflow, clickable contact details, and mobile optimization. |
 | **Accessibility** | Keyboard navigation, focus states, contrast, semantic HTML, labels, alt text, motion, controls, and useful errors. |
 | **Forms** | Client and server validation, invalid input, duplicate submissions, success/error messages, failures, mobile input, and spam/abuse cases. |
-| **Trust** | No fabricated testimonials, metrics, customer logos, certifications, capabilities, business details, or unsupported claims. |
+| **Trust & content integrity** | No fabricated testimonials, metrics, customer logos, certifications, capabilities, business details, pricing, reviews, or unsupported claims. |
 | **Production cleanup** | Console errors, network failures, starter artifacts, placeholder text, unused navigation, debug mode, source maps, dependencies, configuration, and deployment readiness. |
 | **Final verification** | A clear distinction between evidence-backed PASS/FAIL/UNKNOWN/N/A security results and broader production-readiness status. |
 
 ## 🔐 Evidence-Driven Security
 
-Production Pup now incorporates the supplied Part 4 launch filter as a cumulative **70-check security verification matrix**. The governing rule is simple: if you cannot point to the code, setting, configuration, test, or log that proves a guardrail exists, do not mark it PASS. fileciteturn75file0L8-L25
+Production Pup uses an evidence-driven **70-check security verification matrix**. The governing rule is simple: if you cannot point to the code, setting, configuration, test, or log that proves a guardrail exists, do not mark it PASS.
 
-The final 16 checks add coverage for:
-
-- MFA on privileged accounts
-- account enumeration
-- business-logic abuse
-- race conditions
-- webhook replay and duplicate processing
-- overpowered CI/CD credentials
-- untrusted build actions/scripts
-- unpinned build dependencies
-- fail-open security checks
-- resource limits
-- AI sensitive-information disclosure
-- unsafe use of AI output
-- excessive AI-agent agency
-- sensitive browser storage
-- open redirects
-- GraphQL/WebSocket/realtime endpoint security
-
-These checks are explicitly defined in the supplied Part 4 document on page 3. fileciteturn75file0L202-L254
+The security workflow also separates repository-checkable controls from operational/provider controls. Backups, restore tests, billing alerts, registrar/DNS security, WAF configuration, restricted admin access, canary detection, and independent penetration testing must be supported by external evidence rather than guessed from source code.
 
 ## 🧭 How It Thinks
 
@@ -87,22 +70,22 @@ Apply intentional design
     ↓
 Security pass
     ↓
-Privacy pass
+Privacy + legal pass
     ↓
 SEO + accessibility pass
     ↓
 Performance pass
     ↓
-Production pass
+Trust + conversion pass
     ↓
-Trust pass
+Production pass
     ↓
 Final visual + mobile audit
     ↓
 Verify what is actually ready
 ```
 
-A polished interface cannot compensate for broken authorization, leaked API keys, missing error states, or fake claims.
+A polished interface cannot compensate for broken authorization, leaked API keys, missing consent controls, fake claims, or broken user flows.
 
 ## ⚡ Slash Commands
 
@@ -113,11 +96,12 @@ Production Pup includes **user-invocable slash commands** for focused workflows.
 | `/production-pup` | Run the complete Production Pup audit. |
 | `/fix` | Audit, implement relevant fixes, then verify them. |
 | `/report` | Audit only and produce a structured readiness report. No project changes. |
-| `/security` | Run the 70-check evidence-driven security workflow. |
-| `/seo` | Focus on SEO, metadata, crawling, structured data, social previews, and discoverability. |
+| `/security` | Run the 70-check evidence-driven security workflow plus operational evidence checks. |
+| `/seo` | Focus on SEO, metadata, crawling, structured data, social previews, local discoverability, and trust/conversion SEO. |
 | `/performance` | Focus on frontend, API, database, caching, bundles, queries, and scalability. |
-| `/design` | Focus on visual quality, design systems, UX polish, and anti-vibecoding patterns. |
+| `/design` | Focus on visual quality, design systems, UX correctness, motion, and anti-vibecoding patterns. |
 | `/accessibility` | Focus on keyboard, semantic HTML, contrast, labels, motion, and accessible interaction. |
+| `/polish` | Focus on website details, interaction correctness, micro-interactions, and mobile polish. |
 | `/launch` | Run the final release-readiness gate and identify blockers before shipping. |
 
 ### Example
@@ -132,7 +116,13 @@ Runs the complete audit.
 /security
 ```
 
-Runs the 70-check security workflow with evidence requirements.
+Runs the evidence-driven security workflow.
+
+```text
+/polish
+```
+
+Runs the focused website polish and interaction audit.
 
 ```text
 /fix
@@ -148,7 +138,7 @@ Creates a report without modifying the project.
 
 ## 🛠️ How to Use
 
-The main skill lives in `SKILL.md`. Focused slash-command workflows live directly under `.claude/commands/`.
+The main skill lives in `SKILL.md`. Focused slash-command workflows live directly under `.claude/commands/`. Detailed reference material lives under `references/`.
 
 Give the skill to your AI coding agent or use the slash commands when your agent supports repository command files.
 
@@ -163,6 +153,7 @@ Use the skill when asking an agent to:
 - improve security and privacy
 - fix accessibility or responsive issues
 - clean up a generated/vibe-coded interface
+- improve trust and conversion flows
 - review AI-agent permissions and production security
 
 The preferred workflow is to invoke the relevant Production Pup command rather than manually pasting a long prompt.
@@ -183,7 +174,7 @@ Before making that claim, the project should have:
 - safe concurrency and webhook processing where relevant
 - controlled CI/CD credentials and dependencies
 - secure AI inputs, outputs, tools, and agent permissions where AI exists
-- privacy/legal pages where required
+- privacy/legal controls appropriate to the product and jurisdiction
 - intentional analytics and tracking
 - useful SEO metadata on public pages
 - accessible interactions
@@ -191,10 +182,12 @@ Before making that claim, the project should have:
 - useful success and error feedback
 - loading, empty, success, and error states
 - optimized assets and reasonable performance
+- real CTAs, contact details, booking/confirmation flows, and trust signals where applicable
 - a clean production build
 - no unexplained critical console or network errors
 - no fake credibility or unsupported claims
 - a coherent, product-specific visual system
+- evidence for operational controls that cannot be verified from source code
 
 If something cannot be verified, **say so instead of pretending it is done.**
 
@@ -209,7 +202,10 @@ Gradients, glassmorphism, giant shadows, generic bento grids, decorative code wi
 ## 📋 Quick Pre-Launch Check
 
 - [ ] Privacy Policy exists if required
-- [ ] Terms exist if required
+- [ ] Terms/refund/cookie disclosures exist where applicable
+- [ ] Consent flows match actual data collection
+- [ ] No unnecessary personal data is collected
+- [ ] Third-party SDKs are reviewed
 - [ ] No frontend secrets
 - [ ] HTTPS is configured
 - [ ] Privileged accounts use MFA where supported
@@ -217,13 +213,15 @@ Gradients, glassmorphism, giant shadows, generic bento grids, decorative code wi
 - [ ] Webhooks are verified and safely deduplicated where used
 - [ ] CI/CD credentials and actions are scoped
 - [ ] AI data, output, tools, and agent permissions are controlled where used
-- [ ] Page titles and descriptions are correct
+- [ ] Page titles and descriptions are correct and unique
 - [ ] Social preview is configured
 - [ ] Favicon is present
 - [ ] Sitemap and robots configuration are correct
 - [ ] Images are optimized
 - [ ] Performance has been checked
 - [ ] Contrast has been checked
+- [ ] Button states have readable text/icons
+- [ ] Buttons and CTA groups do not overlap
 - [ ] Mobile layout works without unintended horizontal overflow
 - [ ] Mobile menu works
 - [ ] Phone/email links are clickable where appropriate
@@ -234,10 +232,13 @@ Gradients, glassmorphism, giant shadows, generic bento grids, decorative code wi
 - [ ] Forms validate correctly
 - [ ] Success and error messages are useful
 - [ ] Placeholder text and unused navigation are removed
-- [ ] Spam/resource protection exists where needed
+- [ ] Trust claims, reviews, case studies, pricing, and business details are real
+- [ ] Booking flow and confirmation state work where applicable
 - [ ] Keyboard navigation works
-- [ ] Claims and business details are real
+- [ ] Reduced-motion behavior is supported
 - [ ] Production build has been tested
+- [ ] Backups and restore tests are evidenced where relevant
+- [ ] Provider/security controls are verified rather than assumed
 
 For the full audit, use the [complete skill file](./SKILL.md).
 
@@ -258,7 +259,14 @@ Production-skill/
 │       ├── performance.md
 │       ├── design.md
 │       ├── accessibility.md
+│       ├── polish.md
 │       └── launch.md
+├── references/
+│   ├── design-quality.md
+│   ├── video-polish-checks.md
+│   ├── privacy-legal-readiness.md
+│   ├── trust-conversion-seo.md
+│   └── security-operational-hardening.md
 └── assets/
     └── production-pup-banner.png
 ```
