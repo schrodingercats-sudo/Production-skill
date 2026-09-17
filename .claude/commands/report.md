@@ -9,6 +9,10 @@ Also read:
 - `references/trust-conversion-seo.md`
 - `references/security-operational-hardening.md`
 - `references/design-quality.md`
+- `references/ai-content-authenticity.md`
+- `references/cost-abuse-performance.md`
+- `references/domain-seo-operations.md`
+- `references/consumer-risk-patterns.md`
 
 ## Command
 
@@ -26,7 +30,11 @@ Return:
 8. UNKNOWN/outstanding items that could not be verified
 9. Recommended next actions
 
-Include relevant findings from privacy/legal readiness, trust/conversion, local SEO, operational security, and UI interaction quality. Do not treat provider settings or legal applicability as proven by repository source code. Do not fabricate evidence, claims, business details, or compliance status.
+Include relevant findings from privacy/legal readiness, trust/conversion, local SEO, operational security, content quality, cost/abuse protection, domain operations, consumer-risk patterns, and UI interaction quality.
+
+For content findings, treat stylistic signals as review prompts rather than proof of AI authorship. For cost findings, do not invent monetary exposure. For legal findings, separate engineering defects from jurisdiction-specific legal questions.
+
+Do not treat provider settings or legal applicability as proven by repository source code. Do not fabricate evidence, claims, business details, compliance status, customer stories, or pricing.
 
 Classify findings as Implemented, Verified, Provider handled, Not applicable, UNKNOWN/Needs evidence, or Outstanding. Do not modify files in report-only mode.
 
