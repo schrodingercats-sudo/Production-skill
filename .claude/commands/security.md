@@ -4,7 +4,10 @@ Run the security-focused Production Pup audit.
 
 Read `SKILL.md` first and use its Security Audit and 70-check Security Verification Matrix as the source of truth.
 
-Also read `references/security-operational-hardening.md` for controls that require deployment, provider, DNS, registrar, billing, backup, or independent-review evidence.
+Also read:
+- `references/security-operational-hardening.md`
+- `references/cost-abuse-performance.md`
+- `references/consumer-risk-patterns.md`
 
 ## Command
 
@@ -22,7 +25,7 @@ For every relevant check, return exactly one of:
 
 For every PASS, cite the exact file, configuration, setting, test, or log that proves it. Do not mark PASS from visual inspection alone when runtime or provider evidence is required. For FAIL or UNKNOWN, give the realistic failure mode, smallest safe fix, and verification step.
 
-Do not change production data or infrastructure during an audit. Prioritize authentication, authorization, private data, payments, admin access, secrets, AI tools, and spend.
+Do not change production data or infrastructure during an audit. Prioritize authentication, authorization, private data, payments, admin access, secrets, AI tools, spend, and resource exhaustion.
 
 ### Security coverage
 
@@ -53,15 +56,35 @@ Audit and, when requested, fix:
 - public resource identifiers and avoidable sequential-ID enumeration
 - log redaction for tokens, passwords, card data, and other sensitive values
 
+### Cost and abuse checks
+
+Also audit the concrete resource-exhaustion patterns in `references/cost-abuse-performance.md`:
+
+- missing spend caps or only-alerting controls on metered services
+- whole-database reads and `SELECT *` over-fetching
+- unbounded list endpoints
+- retry loops and retry multiplication
+- retries of non-idempotent operations
+- missing exponential backoff/jitter where repeated retries are appropriate
+- missing rate limits on AI, API, download, upload, email, auth, and other expensive endpoints
+- unrestricted repeated file downloads and bandwidth abuse
+- missing request, upload, timeout, concurrency, queue, storage, token, and usage ceilings
+
+Verify controls server-side. Do not rely on client-side counters for security or cost protection.
+
 ### Operational / provider checks
 
 Read `references/security-operational-hardening.md` and separate repository evidence from operator/provider evidence. Ask for evidence of backups and restore tests, billing/spend alerts, registrar/DNS 2FA and transfer lock, CAA records, dangling DNS, WAF, restricted admin access, canary detection, and recent independent security review or penetration testing. Do not infer these controls from application source code.
+
+### Consumer-risk security checks
+
+Where applicable, inspect public storage, deletion promises, subscription cancellation, trial-to-paid transitions, auto-renewal behavior, privacy-policy accuracy, and high-consequence AI output. Separate engineering findings from jurisdiction-specific legal questions.
 
 ### Evidence standard
 
 The governing rule is: if you cannot point to the code, setting, configuration, test, or log that proves a guardrail exists, treat it as missing or UNKNOWN rather than assuming it is present. If the control is explicitly external to the repository, use ASK ME and state the evidence required.
 
-After fixes, re-test the deployed path where applicable and re-run the audit after meaningful changes to authentication, data, infrastructure, dependencies, payments, or AI tools.
+After fixes, re-test the deployed path where applicable and re-run the audit after meaningful changes to authentication, data, infrastructure, dependencies, payments, AI tools, or expensive endpoints.
 
 Do not claim a system is secure merely because code looks correct. This is an audit workflow, not a penetration test or guarantee.
 
