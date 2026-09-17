@@ -9,6 +9,10 @@ Also apply:
 - `references/privacy-legal-readiness.md`
 - `references/trust-conversion-seo.md`
 - `references/security-operational-hardening.md`
+- `references/ai-content-authenticity.md`
+- `references/cost-abuse-performance.md`
+- `references/domain-seo-operations.md`
+- `references/consumer-risk-patterns.md`
 
 ## Command
 
@@ -20,7 +24,7 @@ Perform a complete release-readiness check covering:
 - authentication, authorization, privileged-account MFA, and permissions
 - secrets and Git history
 - input/API protection, business-logic abuse, race conditions, and fail-closed behavior
-- rate limits, resource limits, and abuse protection
+- rate limits, resource limits, spend limits, and abuse protection
 - AI prompt injection, sensitive-data disclosure, unsafe AI output handling, tool permissions, and agent agency
 - webhook signatures, replay/duplicate processing, and server-side payment/entitlement checks
 - OAuth/OIDC/social login and account enumeration
@@ -33,11 +37,13 @@ Perform a complete release-readiness check covering:
 - GraphQL/WebSocket/realtime security where used
 - privacy and legal readiness using `references/privacy-legal-readiness.md`
 - actual data collection, consent, cookie/tracking behavior, third-party SDKs, deletion/retention behavior, claims, pricing/fees, licensing, accessibility, and contact details
+- subscription cancellation, trial-to-paid transitions, auto-renewal behavior, and public/private storage where applicable
 - SEO basics
 - unique page titles and useful meta descriptions
 - sensible H1/heading structure and canonical URLs
 - sitemap, robots configuration, and `lang` attribution
 - favicon and social metadata
+- public versus authenticated host/indexing boundaries
 - 404 and error states
 - broken links and footer links
 - trust/conversion details including clear CTAs, short forms, FAQs, service/product pages, real case studies, booking/confirmation flows, visible contact details, and legitimate response-time promises where applicable
@@ -66,14 +72,14 @@ Perform a complete release-readiness check covering:
 - caching
 - database indexes and query patterns
 - N+1 queries
-- pagination
+- pagination and over-fetching
 - CDN/load balancing where appropriate
 - connection pooling where needed
 - production JavaScript/CSS optimization
 - unused dependencies and assets
 - deferred non-critical scripts
 - console and network errors
-- real content and claims
+- content quality, generic AI-style filler, unsupported claims, and project-specific substance
 - successful production build
 
 Do not declare the project ready if critical items are outstanding or unverifiable. Produce a concise release report with evidence, blockers, UNKNOWN/provider-evidence items, and recommended next actions.
