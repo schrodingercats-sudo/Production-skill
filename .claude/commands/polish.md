@@ -1,20 +1,21 @@
 # Production Pup: Polish
 
-Run the focused website polish, interaction-correctness, and micro-animation audit.
+Run the focused website polish, interaction-correctness, micro-animation, content, and mobile audit.
 
 Read `SKILL.md` first, then read:
 - `references/video-polish-checks.md`
 - `references/design-quality.md`
+- `references/ai-content-authenticity.md`
 
-Use both references as the source of truth for this workflow.
+Use these references as the source of truth for this workflow.
 
 ## Command
 
 `/polish`
 
-## Video-derived production checks
+## Website production checks
 
-Check and, when requested, fix the 20 video-derived details:
+Check and, when requested, fix:
 
 - horizontal scroll and mobile overflow
 - broken links and footer links
@@ -32,8 +33,6 @@ Check and, when requested, fix the 20 video-derived details:
 - clickable phone numbers
 - clickable email addresses
 - overall mobile optimization
-
-Test real interactions where possible. Do not mark a check PASS merely because the UI looks correct.
 
 ## UI correctness checks
 
@@ -63,6 +62,12 @@ Also inspect and, when requested, fix:
 - loading/success/error feedback
 - overall interaction polish and perceived craftsmanship
 
+## Content polish
+
+Also inspect visible copy for generic AI-style filler, repetitive stock phrasing, unnecessary rhetorical questions, cliche framing, over-explaining obvious points, excessive emoji use, unsupported claims, and lack of project-specific substance.
+
+Treat these as review signals, not proof of AI authorship. Do not add fake typos, awkward grammar, fake personal experience, fabricated examples, or invented claims to make copy appear human.
+
 ## Animation guidance
 
 For React projects, prefer Motion when appropriate, using the current `motion` package and `motion/react` imports. Use it for purposeful hover, tap, focus, in-view, layout, enter/exit, and gesture interactions. Use CSS transitions when a simple effect is clearer and lighter. Do not stack animation libraries without a concrete reason.
@@ -88,6 +93,7 @@ After fixes:
 7. Test reduced-motion behavior.
 8. Check the browser console.
 9. Re-run the relevant build/tests.
+10. Compare important copy against the actual product and evidence.
 
 Never solve a structural overlap bug by adding arbitrary z-index values unless the stacking context is actually intentional.
 
