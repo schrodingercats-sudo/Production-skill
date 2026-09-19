@@ -5,6 +5,7 @@ Run the focused website polish, interaction-correctness, micro-animation, conten
 Read `SKILL.md` first, then read:
 - `references/video-polish-checks.md`
 - `references/design-quality.md`
+- `references/ui-vocabulary.md`
 - `references/ai-content-authenticity.md`
 
 Use these references as the source of truth for this workflow.
@@ -12,6 +13,8 @@ Use these references as the source of truth for this workflow.
 ## Command
 
 `/polish`
+
+Use precise UI vocabulary when describing layout, components, interaction states, responsive behavior, and verification results.
 
 ## Website production checks
 
