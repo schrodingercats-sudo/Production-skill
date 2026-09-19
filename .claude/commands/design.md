@@ -2,11 +2,15 @@
 
 Run the design, anti-vibecoding, UI-correctness, and interaction-focused Production Pup audit.
 
-Read `SKILL.md` first and use its Anti-Vibe-Coding Design Audit and Design System sections as the source of truth. Then read `references/design-quality.md` for the detailed button, layout, icon, and micro-interaction checks.
+Read `SKILL.md` first and use its Anti-Vibe-Coding Design Audit and Design System sections as the source of truth. Then read:
+- `references/design-quality.md`
+- `references/ui-vocabulary.md`
 
 ## Command
 
 `/design`
+
+Use precise UI vocabulary when writing findings and fixes. Name the relevant structure, component, state, responsive condition, observed behavior, intended behavior, and verification step. Do not treat the vocabulary as a checklist of components that every project must use.
 
 Audit and, when requested, fix:
 
