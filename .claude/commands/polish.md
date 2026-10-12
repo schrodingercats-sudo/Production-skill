@@ -36,6 +36,10 @@ Check and, when requested, fix:
 - clickable phone numbers
 - clickable email addresses
 - overall mobile optimization
+- conditional completeness checks for dark-mode persistence, search, skip-to-content, print styles, visibility toggles, banners, and sticky navigation
+- consent-aware tracking and third-party widgets
+- confirmation, duplicate-submission, copy/export, and empty/error states
+- floating contact/help controls that do not obscure content or focus
 
 ## UI correctness checks
 

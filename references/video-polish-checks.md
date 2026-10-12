@@ -70,6 +70,27 @@ These checks were extracted from the supplied video titled “20 things to tell 
 20. **Mobile optimize**
     - Treat mobile as a first-class production target: responsive layout, readable text, usable controls, correct spacing, touch targets, menus, media, forms, and no accidental overflow.
 
+## Conditional product-completeness sweep
+
+The videos also suggest features that are easy to overlook. These are **conditional checks**, not a mandate to add every feature to every website. Add them only when they solve a real user need or are part of the product's intended behavior.
+
+- **Dark-mode toggle:** if offered, persist the choice, maintain contrast in both themes, and avoid a disruptive initialization flash.
+- **Site search:** where users need to find substantial content or records, verify results, empty/loading/error states, and safe query handling.
+- **Primary CTA and top-of-page clarity:** make the main action and product value clear without stacking competing CTAs.
+- **Announcement/banner:** if present, ensure it can be dismissed when appropriate and does not cover navigation/content on mobile.
+- **Skip-to-content:** provide a visible-on-focus skip link for keyboard users on sites with repeated navigation.
+- **Print stylesheet:** for pages users may print/save, avoid clipping, wasteful dark backgrounds, and controls that obscure content.
+- **Visibility toggles:** password reveal or show/hide controls must expose state accessibly and preserve input/state.
+- **Expandable sections:** accordions/disclosures must communicate expanded state, work with keyboards, and not hide critical information unexpectedly.
+- **Form completion:** verify pending/loading, validation failure, server failure, success, duplicate submission, and recovery after errors.
+- **Copy/export actions:** show success/failure feedback and ensure the output is the intended data.
+- **Confirmation dialogs:** use for destructive or hard-to-reverse actions; avoid unnecessary confirmation for routine reversible actions.
+- **Floating contact/help controls:** ensure they do not cover primary controls or keyboard focus and work on mobile.
+- **Tracking and consent:** analytics/marketing scripts must respect the site's consent and privacy requirements.
+- **Scroll progress/back-to-top:** use only when useful for long pages; keep the indicator accurate and motion accessible.
+- **Sticky navigation:** verify it does not cover anchor targets, focused controls, dialogs, or content on small screens.
+- Do not add search, contact widgets, print controls, banners, or other features solely to satisfy a checklist. Mark them not applicable when they do not serve the product.
+
 ## Evidence and Fix Rules
 
 - Do not mark a check PASS merely because the UI looks correct.

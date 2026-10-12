@@ -11,6 +11,7 @@ Also apply:
 - `references/security-operational-hardening.md`
 - `references/ai-content-authenticity.md`
 - `references/cost-abuse-performance.md`
+- `references/architecture-reliability-and-load-testing.md`
 - `references/domain-seo-operations.md`
 - `references/consumer-risk-patterns.md`
 
@@ -76,6 +77,11 @@ Perform a complete release-readiness check covering:
 - CDN/load balancing where appropriate
 - connection pooling where needed
 - production JavaScript/CSS optimization
+- load-test evidence with documented workload, pass/fail thresholds, latency percentiles, error rate, and resource saturation where backend load warrants it
+- cache invalidation, stale data, private-response isolation, and safe cache-failure behavior
+- timeouts, bounded retries, idempotency, circuit breakers, queue recovery, and worker shutdown where relevant
+- WebSocket/SSE authentication, authorization, reconnect, message/connection limits, and multi-instance fanout where realtime is used
+- third-party and AI cost growth, context/token usage, storage retention, and provider quota/billing failure behavior
 - unused dependencies and assets
 - deferred non-critical scripts
 - console and network errors

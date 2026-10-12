@@ -108,3 +108,21 @@ For each finding, explain:
 5. How to test the limit safely without generating unnecessary real-world cost.
 
 Do not claim a fixed dollar exposure unless the project provides enough provider pricing and usage data to support the calculation.
+
+## 7. Cache correctness and bounded degradation
+
+For each cache, document the source of truth, key dimensions, TTL/invalidation strategy, freshness requirements, and behavior when the cache is unavailable.
+
+- Include user/tenant/authorization scope in keys when it changes the response.
+- Verify private or personalized responses cannot leak through shared browser, CDN, or reverse-proxy caches.
+- Test stale reads after writes, deletes, permission changes, logout, and tenant switching.
+- Check cache stampedes and whether cache failure creates an unbounded load on the database or a paid API.
+- Choose cache-aside, write-through, or write-behind according to correctness and durability needs. Write-behind can acknowledge before durable persistence, so require an explicit acceptable loss window, recovery plan, ordering strategy, and idempotent writes.
+- Measure cold-cache and warm-cache results; do not add a cache merely to improve a benchmark.
+
+## 8. Load-test and observability evidence
+
+When backend performance matters, use representative user journeys, realistic data, concurrency, read/write mix, payloads, and cache state. Record throughput and latency percentiles (p50/p95, plus p99 when appropriate), errors/timeouts, CPU/memory, event-loop or worker saturation, database connection use, slow queries, pool wait time, queue depth/lag, retry counts, load-generator resource use, and spend/token use for expensive workflows.
+
+Set thresholds from product requirements and user expectations. Test controlled ramp, peak, and sustained load when justified. Do not publish a maximum-user claim without documenting workload and test conditions. Never run a test that may overload production or create uncontrolled provider charges.
+

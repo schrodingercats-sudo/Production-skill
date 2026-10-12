@@ -366,6 +366,12 @@ Do not add caching blindly. Respect authentication, personalization, invalidatio
 - Use database connection pooling for applications that make repeated database connections.
 - Avoid over-indexing when write cost and storage overhead outweigh the benefit.
 
+### Load-test and capacity evidence
+
+When a product has meaningful backend traffic or expensive operations, test realistic user journeys rather than quoting a single maximum-user number. Record workload, concurrency, throughput, p50/p95/p99 latency as appropriate, error/timeout rate, CPU/memory, database connections/slow queries, queue lag, and cost-sensitive usage. Monitor whether the load generator itself saturates. Define thresholds from product SLOs and user expectations; do not invent capacity claims from a synthetic demo.
+
+Validate cold-cache and warm-cache behavior, stale data after writes, cache invalidation, tenant/user isolation, and behavior when a cache or dependency fails. Treat write-behind caching as a durability tradeoff because acknowledged data may not yet be persisted.
+
 ### Infrastructure and delivery
 
 - Use a CDN for static assets and cacheable content when it materially improves latency or reduces origin load.
@@ -373,6 +379,8 @@ Do not add caching blindly. Respect authentication, personalization, invalidatio
 - Verify caching layers, CDN behavior, and cache invalidation.
 - Check API and database latency under realistic production conditions.
 - Test the production build rather than relying only on development-mode performance.
+
+For architecture choices, load-test design, cache correctness, realtime transport, retries/timeouts, and launch economics, also apply `references/architecture-reliability-and-load-testing.md`. Add infrastructure only when evidence or a product requirement justifies it.
 
 ### Performance anti-patterns
 
@@ -568,6 +576,8 @@ Verify that:
 - mobile navigation is usable and does not create horizontal overflow
 
 ## 18. Final Pre-Launch Gate
+
+For applications with meaningful backend load, include representative load-test evidence and verify cache correctness, queue recovery, dependency timeouts, and realtime reconnect/authorization behavior where applicable. Do not block a small static site on irrelevant infrastructure tests.
 
 Before declaring the project ready, verify as applicable:
 

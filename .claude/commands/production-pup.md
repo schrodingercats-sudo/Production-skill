@@ -12,6 +12,7 @@ Also read:
 - `references/security-operational-hardening.md`
 - `references/ai-content-authenticity.md`
 - `references/cost-abuse-performance.md`
+- `references/architecture-reliability-and-load-testing.md`
 - `references/domain-seo-operations.md`
 - `references/consumer-risk-patterns.md`
 
@@ -37,6 +38,7 @@ Apply these references where relevant. External/provider controls must be verifi
 12. Audit content for generic AI-style filler, repetitive stock phrasing, unsupported claims, and lack of project-specific substance. Treat style signals as review prompts, not proof of AI authorship.
 13. Audit local SEO only when the project is location-based. Do not invent locations, keyword-stuff, or fake backlinks.
 14. Audit cost and abuse boundaries for expensive APIs, AI generation, downloads, retries, database reads, and other metered operations. Verify server-side limits rather than trusting client-side counters.
+14a. For meaningful backend workloads, check load-test quality, latency percentiles, error rates, saturation, queue lag, cache correctness, retry/timeouts, and realtime reconnect/auth behavior. Do not require complex infrastructure where it is not justified.
 15. Audit domain/subdomain architecture, DNS integrity, public versus authenticated hosts, sitemap scope, and search-tool configuration when relevant.
 16. Audit consumer-risk patterns including public uploads, deletion promises, cancellation friction, auto-renewal/trial flows, privacy-policy accuracy, and high-consequence AI output where applicable.
 17. Separate repository-verifiable security controls from provider/operator controls such as backups, restore tests, billing alerts, registrar/DNS security, WAF, restricted admin access, and independent security review.
