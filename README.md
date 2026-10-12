@@ -263,10 +263,16 @@ Production-skill/
 │       └── launch.md
 ├── references/
 │   ├── design-quality.md
+│   ├── ui-vocabulary.md
 │   ├── video-polish-checks.md
 │   ├── privacy-legal-readiness.md
 │   ├── trust-conversion-seo.md
-│   └── security-operational-hardening.md
+│   ├── security-operational-hardening.md
+│   ├── ai-content-authenticity.md
+│   ├── cost-abuse-performance.md
+│   ├── architecture-reliability-and-load-testing.md
+│   ├── domain-seo-operations.md
+│   └── consumer-risk-patterns.md
 └── assets/
     └── production-pup-banner.png
 ```
