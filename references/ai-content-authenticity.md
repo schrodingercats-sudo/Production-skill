@@ -32,6 +32,19 @@ Audit for:
 - Avoid adding emojis simply to make copy appear casual.
 - Keep terminology consistent across pages, UI states, emails, and documentation.
 
+## Clear, conversion-aware writing
+
+When copy is intended to explain or convert, check whether it is specific and useful rather than simply punchy.
+
+- Lead with the user's outcome or benefit when that is clearer than leading with implementation details.
+- Make the headline concrete and ensure the body actually supports its promise.
+- Put the most important value proposition and next step where users can find them quickly, without forcing them to scroll through generic setup.
+- Keep one main idea per section. Use short paragraphs, descriptive headings, and a small number of meaningful bullets when that improves scanning.
+- Use action-oriented CTAs that state the next step or expected outcome. Address genuine objections before the CTA when reassurance is needed.
+- Remove generic openers, redundant explanations, unsupported claims, and manufactured aphorisms or repeated contrast formulas.
+- Do not treat a ban on one punctuation mark or phrase as a universal writing rule. Edit for clarity, voice, audience, and consistency rather than following style fads.
+- Never invent urgency, scarcity, performance numbers, customer outcomes, or guarantees to make copy more persuasive.
+
 ## Verification
 
 When reviewing content:

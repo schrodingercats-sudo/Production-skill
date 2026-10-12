@@ -21,6 +21,11 @@ Audit and, when requested, fix:
 - inconsistent terminology or brand voice
 - unsupported claims
 - filler content, placeholder copy, and generic marketing language
+- unclear above-the-fold value proposition or headlines unsupported by the body copy
+- feature-first copy where the user benefit would communicate value more clearly
+- vague CTAs, competing primary actions, or objections left unanswered where reassurance is needed
+- long sections that mix multiple ideas or bury important information
+- fake urgency, unsupported guarantees, and invented persuasive claims
 
 Treat these as style signals, not proof that AI wrote the content. Do not deliberately introduce typos or awkward grammar to make writing appear human.
 

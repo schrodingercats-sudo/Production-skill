@@ -86,7 +86,24 @@ Test disconnections, reconnects, stale sessions, unauthorized subscriptions, and
 
 Do not invent cost estimates. Use actual pricing and workload assumptions, and label projections as estimates.
 
-## 7. Evidence and further reading
+## 7. AI workflow reliability and decision quality
+
+For AI-assisted products or agent workflows that classify, route, triage, score, retrieve, escalate, or call tools, check more than prompt-injection security. A workflow can be secure and still make unreliable or expensive decisions.
+
+- Define the job, accepted inputs, expected output schema, and what the system must do when it cannot decide.
+- Validate and normalize inputs before model calls. Validate structured model outputs against a schema before they affect state or trigger downstream actions.
+- Treat retrieved documents as untrusted evidence. Check relevance, freshness, tenant/permission filtering, duplicate content, and whether the system can abstain when retrieval is weak.
+- Use deterministic rules for simple, high-confidence checks where they are more reliable and cheaper than a model. Use model routing only when the task, latency, quality, and cost tradeoff is justified.
+- For spam detection, ticket classification, support triage, lead scoring, request routing, and similar decisions, define false-positive and false-negative costs and test representative examples.
+- Define confidence/uncertainty behavior: retry with a changed strategy only when useful, ask a clarifying question, abstain, or escalate to a human. Do not fabricate certainty.
+- Restrict tool selection to an allowlist and validate every tool argument server-side. The model must not choose its own authority or bypass application authorization.
+- Make side-effecting tools idempotent where possible. Bound retries and prevent duplicate emails, payments, tickets, records, or notifications.
+- Keep a small, versioned evaluation set covering normal cases, edge cases, adversarial inputs, ambiguous cases, and known failures. Compare quality, latency, and cost when prompts, models, retrieval, or routing change.
+- Log enough sanitized decision metadata to debug routing and failures, without storing secrets, full sensitive prompts, or unnecessary personal data.
+- Monitor escalation rate, override rate, incorrect classifications, retry frequency, token use, and cost per successful workflow. Alert on meaningful regressions.
+- Provide a manual fallback for high-impact decisions or when the model/provider is unavailable. Do not let an uncertain model decision silently grant access, charge a user, or perform an irreversible action.
+
+## 8. Evidence and further reading
 
 For each relevant check, use PASS only with concrete code/configuration/test/metric evidence; use FAIL when evidence shows a missing or broken control; use UNKNOWN when production/provider behavior cannot be verified; use NOT APPLICABLE only when genuinely irrelevant. Separate a configured control from a successfully exercised recovery procedure.
 
