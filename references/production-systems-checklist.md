@@ -4,6 +4,8 @@ Use this reference to audit production systems beyond frontend polish. It expand
 
 ## 1. Database performance and capacity
 
+This section explicitly covers **database indexing**, **query optimization**, and **database migrations** as production checks, not merely code-style concerns.
+
 - **Indexing:** inspect query plans and real query patterns before adding indexes. Check filtering, joins, ordering, composite-index order, selectivity, write amplification, index size, and unused/redundant indexes.
 - **Query optimization:** inspect slow-query logs/plans, row estimates, scans, sort spills, lock waits, payload size, and query frequency. Optimize measured bottlenecks rather than guessing.
 - **N+1 queries:** inspect loops, nested serializers, list/detail endpoints, and ORM relations for repeated round trips. Batch, join, eager-load, or otherwise reduce calls when correctness is preserved.
@@ -11,8 +13,8 @@ Use this reference to audit production systems beyond frontend polish. It expand
 - **Read replicas:** use only when read throughput warrants it. Verify replication lag, stale-read tolerance, read-after-write requirements, failover behavior, and that writes never accidentally route to a read-only replica.
 - **Sharding and partitioning:** distinguish sharding across nodes from partitioning within a database. Require measured scale or operational need; document shard/partition keys, routing, rebalancing, skew, pruning, uniqueness constraints, and cross-partition query/transaction costs.
 - **Replication and leader election:** identify the authoritative writer, replication mode/lag, quorum or election behavior, split-brain protection, failover time, and what happens to in-flight writes.
-- **CAP and consistency:** state the failure tradeoff for the actual datastore and operation. Do not describe CAP as a blanket database ranking. Document which reads may be stale and which operations require strong consistency.
-- **Migrations and schema versioning:** use versioned, repeatable migrations; review destructive changes; prefer expand/migrate/contract for rolling releases; handle backfills, lock duration, compatibility between old/new app versions, and rollback limits. Do not assume a down-migration can restore deleted data.
+- **CAP theorem and consistency:** state the failure tradeoff for the actual datastore and operation. Do not describe the CAP theorem as a blanket database ranking. Document whether the system uses strong, read-your-writes, or eventual consistency, which reads may be stale, and which operations require strong consistency.
+- **Database migrations and schema versioning:** use versioned, repeatable migrations; review destructive changes; prefer expand/migrate/contract for rolling releases; handle backfills, lock duration, compatibility between old/new app versions, and rollback limits. Do not assume a down-migration can restore deleted data.
 
 ## 2. Concurrency, locking, memory, and workers
 
@@ -24,7 +26,7 @@ Use this reference to audit production systems beyond frontend polish. It expand
 - **Memory leaks and garbage collection:** inspect heap/RSS over time, retained objects, listeners, timers, caches, buffers, and unbounded collections. Understand GC pauses/pressure for the runtime; do not treat forced GC as a default fix.
 - **Thread safety:** identify shared mutable state and runtime concurrency assumptions. Protect critical sections or use immutable/thread-safe primitives where needed.
 - **Backpressure:** bound queues, concurrency, request bodies, streams, and producer rates. When downstream systems slow, reject, shed, pause, or defer work intentionally instead of accumulating unbounded memory.
-- **Background queues and dead-letter queues:** define retry limits, exponential backoff/jitter, visibility/lease timeout, idempotency, poison-message handling, dead-letter retention, redrive controls, alerting, and operator inspection. A DLQ is not a substitute for fixing repeated failures.
+- **Background queues and dead-letter queues (Dead Letter Queues / DLQs):** define retry limits, exponential backoff/jitter, visibility/lease timeout, idempotency, poison-message handling, dead-letter retention, redrive controls, alerting, and operator inspection. A DLQ is not a substitute for fixing repeated failures.
 - **Cron jobs and scheduled work:** set timezone and daylight-saving behavior intentionally; prevent overlapping runs where unsafe; make jobs idempotent; track missed/late runs; use distributed coordination when multiple instances can schedule the same task.
 
 ## 3. Realtime and service communication
@@ -40,12 +42,12 @@ Use this reference to audit production systems beyond frontend polish. It expand
 ## 4. Scaling, caching, and runtime limits
 
 - **Autoscaling:** scale on signals tied to the bottleneck (CPU, concurrency, queue lag, latency, or custom metrics); configure min/max capacity, cooldowns, startup time, and quota limits. Prevent oscillation and runaway scale-out cost.
-- **Horizontal vs vertical scaling:** document the current bottleneck and tradeoffs. Horizontal scale requires statelessness or deliberate shared-state/session handling; vertical scale has machine/resource ceilings.
+- **Horizontal scaling vs vertical scaling:** document the current bottleneck and tradeoffs. Horizontal scaling requires statelessness or deliberate shared-state/session handling; vertical scaling has machine/resource ceilings.
 - **CDN and edge caching:** cache only responses safe for the audience and freshness policy. Verify origin protection, cache keys, query-string behavior, invalidation, stale serving, and private/authenticated response isolation.
 - **Cache invalidation:** define who invalidates, when, and how stale data is tolerated. Test update/delete paths, cache stampedes, cache outage, tenant/user isolation, and any write-behind durability risk.
 - **Feature flags:** use server-side authorization for protected features; define owners, defaults, targeting, expiration/removal, audit history, and behavior when the flag provider is unavailable. A flag is not an access-control system.
 - **Cold starts and serverless limits:** measure cold and warm latency; verify execution duration, payload size, memory, concurrency, connection reuse, ephemeral storage, and provider quota limits. Avoid architecture claims based only on a warm local run.
-- **Latency and throughput:** measure under representative load and include p95/p99 or other tail percentiles, timeouts, errors, queue delay, and resource saturation. Averages can hide tail pain; distinguish service time from end-to-end latency.
+- **Latency, throughput, p99 latency, and tail latency:** measure under representative load and include p95/p99 or other tail percentiles, timeouts, errors, queue delay, and resource saturation. Averages can hide tail latency; distinguish service time from end-to-end latency.
 - **Network partitions and clock skew:** define timeout and consistency behavior when nodes cannot communicate. Do not assume synchronized clocks for correctness; use monotonic clocks for elapsed time and robust timestamp/idempotency designs for distributed events.
 - **DNS:** verify production records, TTL expectations, certificate/hostname coverage, intended redirects, and safe changes. DNS propagation is not instantaneous and DNS is not an access-control boundary.
 
@@ -54,7 +56,7 @@ Use this reference to audit production systems beyond frontend polish. It expand
 - **Infrastructure as Code (IaC):** version infrastructure definitions, review plans/diffs, separate environments, protect state and secrets, and detect configuration drift. Avoid unmanaged production changes.
 - **Terraform:** check state locking/protection, remote state access, secret exposure in state, provider/version pinning, plan review, and drift. Never paste state containing secrets into logs or issues.
 - **Helm charts/Kubernetes:** validate rendered manifests, values per environment, resource requests/limits, probes, service accounts/RBAC, secrets, rollout strategy, and chart/version compatibility. Do not require Kubernetes for projects that do not use it.
-- **Health checks:** distinguish liveness (process can continue) from readiness (safe to receive traffic); avoid liveness checks that restart an app merely because a transient dependency is slow. Set probe timeouts and startup behavior deliberately.
+- **Health checks, liveness probes, and readiness probes:** distinguish liveness (process can continue) from readiness (safe to receive traffic); avoid liveness checks that restart an app merely because a transient dependency is slow. Set probe timeouts and startup behavior deliberately.
 - **Feature-flagged releases:** use flags to separate deployment from exposure where useful; ensure safe defaults, staged enablement, telemetry, and a removal plan.
 - **Blue-green deployments:** verify traffic switch, compatibility of shared database/state, smoke tests, session behavior, and ability to return traffic safely.
 - **Canary releases:** define a small cohort, guardrail metrics, automatic/manual promotion criteria, and abort thresholds. Ensure canary metrics are comparable and sufficient to detect harm.
@@ -67,7 +69,7 @@ Use this reference to audit production systems beyond frontend polish. It expand
 - **Secrets management:** use a managed secret store or deployment secret mechanism where available, least privilege, rotation, audit logs, and separation between environments. Never commit secrets or print them in build/runtime logs.
 - **IAM:** apply least privilege to people, services, CI, databases, storage, queues, and cloud resources; review wildcard permissions, stale identities, and privilege escalation paths.
 - **OAuth and JWT rotation:** validate issuer, audience, expiry, signature, algorithm, state/nonce as relevant; define key rotation and overlap, token revocation/session invalidation, and behavior when discovery/JWKS endpoints fail.
-- **TLS and encryption:** require TLS for production transport where appropriate; verify certificate renewal and hostname coverage; use provider encryption at rest and deliberate key/secret access. Encryption configuration alone does not prove backups or logs are protected.
+- **TLS, encryption at rest, and encryption in transit:** require TLS for production transport where appropriate; verify certificate renewal and hostname coverage; use provider encryption at rest and deliberate key/secret access. Encryption configuration alone does not prove backups or logs are protected.
 - **WAF and DDoS protection:** verify provider-side configuration, rules, rate limits, origin shielding, and bypass paths when warranted. A WAF does not replace application authorization or input handling.
 - **CORS and CSRF:** allow only intended origins and methods for credentialed APIs; protect cookie-authenticated state-changing requests with a suitable CSRF strategy. CORS is not authentication.
 - **SQL injection, XSS, and SSRF:** use parameterized queries, context-appropriate output encoding/sanitization, and strict outbound destination/redirect controls. For SSRF, block unsafe internal/metadata destinations and re-check DNS/redirect behavior.
