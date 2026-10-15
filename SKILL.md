@@ -380,7 +380,7 @@ Validate cold-cache and warm-cache behavior, stale data after writes, cache inva
 - Check API and database latency under realistic production conditions.
 - Test the production build rather than relying only on development-mode performance.
 
-For architecture choices, load-test design, cache correctness, realtime transport, retries/timeouts, and launch economics, also apply `references/architecture-reliability-and-load-testing.md`. Add infrastructure only when evidence or a product requirement justifies it.
+For architecture choices, load-test design, cache correctness, realtime transport, retries/timeouts, and launch economics, also apply `references/architecture-reliability-and-load-testing.md`. For database/distributed-systems depth, deployments, observability, security operations, networking, and incident recovery, apply `references/production-systems-checklist.md`. Add infrastructure only when evidence or a product requirement justifies it.
 
 ### Performance anti-patterns
 
@@ -577,7 +577,7 @@ Verify that:
 
 ## 18. Final Pre-Launch Gate
 
-For applications with meaningful backend load, include representative load-test evidence and verify cache correctness, queue recovery, dependency timeouts, and realtime reconnect/authorization behavior where applicable. Do not block a small static site on irrelevant infrastructure tests.
+For applications with meaningful backend load, include representative load-test evidence and verify database/query behavior, concurrency invariants, cache correctness, queue recovery/DLQs, dependency timeouts, deployment/rollback safety, observability, backup/restore evidence, and realtime reconnect/authorization behavior where applicable. Apply `references/production-systems-checklist.md` for the detailed conditional checklist. Do not block a small static site on irrelevant infrastructure tests.
 
 Before declaring the project ready, verify as applicable:
 

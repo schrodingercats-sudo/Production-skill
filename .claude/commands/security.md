@@ -8,6 +8,7 @@ Also read:
 - `references/security-operational-hardening.md`
 - `references/cost-abuse-performance.md`
 - `references/consumer-risk-patterns.md`
+- `references/production-systems-checklist.md` for database/distributed-systems, secrets/IAM, network controls, and operational evidence
 
 ## Command
 
@@ -45,6 +46,8 @@ Audit and, when requested, fix:
 - excessive AI agent agency and confirmation boundaries for consequential actions
 - audit logging, security monitoring, alerting, backup/restore testing, and incident-relevant observability
 - least-privilege database access and sensitive data protection in transit and at rest
+- IAM/service identity scope, secret rotation, TLS/key rotation, WAF/DDoS provider evidence, and multi-region/failover risks where relevant
+- database transaction/locking correctness, race conditions, deadlocks, replication/leader-election risks, and safe migration permissions
 - CI/CD credentials, deployment environment protection, third-party build actions/scripts, and fail-closed security behavior
 - sensitive browser storage such as localStorage, IndexedDB, and caches
 - GraphQL, WebSocket, and realtime endpoint authentication, authorization, and abuse limits

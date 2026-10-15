@@ -13,6 +13,8 @@ Also read:
 - `references/cost-abuse-performance.md`
 - `references/domain-seo-operations.md`
 - `references/consumer-risk-patterns.md`
+- `references/architecture-reliability-and-load-testing.md`
+- `references/production-systems-checklist.md`
 
 ## Command
 
@@ -30,7 +32,7 @@ Return:
 8. UNKNOWN/outstanding items that could not be verified
 9. Recommended next actions
 
-Include relevant findings from privacy/legal readiness, trust/conversion, local SEO, operational security, content quality, cost/abuse protection, domain operations, consumer-risk patterns, and UI interaction quality.
+Include relevant findings from privacy/legal readiness, trust/conversion, local SEO, operational security, content quality, cost/abuse protection, domain operations, consumer-risk patterns, UI interaction quality, database/distributed-systems correctness, deployment safety, observability, and incident recovery.
 
 For content findings, treat stylistic signals as review prompts rather than proof of AI authorship. For cost findings, do not invent monetary exposure. For legal findings, separate engineering defects from jurisdiction-specific legal questions.
 

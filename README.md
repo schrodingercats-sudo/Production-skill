@@ -271,6 +271,7 @@ Production-skill/
 │   ├── ai-content-authenticity.md
 │   ├── cost-abuse-performance.md
 │   ├── architecture-reliability-and-load-testing.md
+│   ├── production-systems-checklist.md
 │   ├── domain-seo-operations.md
 │   └── consumer-risk-patterns.md
 └── assets/

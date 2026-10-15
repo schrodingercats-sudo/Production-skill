@@ -4,7 +4,7 @@ Run the performance and scalability-focused Production Pup audit.
 
 Read `SKILL.md` first and use its Performance and Scalability Audit as the source of truth.
 
-Also read `references/cost-abuse-performance.md` for cost and resource-exhaustion patterns, and `references/architecture-reliability-and-load-testing.md` for load-test evidence, architecture choices, cache correctness, retries, queues, and realtime behavior.
+Also read `references/cost-abuse-performance.md` for cost and resource-exhaustion patterns, `references/architecture-reliability-and-load-testing.md` for load-test evidence and failure behavior, and `references/production-systems-checklist.md` for database performance, concurrency, queues, scaling, caching, and runtime limits.
 
 ## Command
 
@@ -44,7 +44,10 @@ Audit and, when requested, fix:
 - load-generator saturation and realistic cold/warm cache behavior
 - cache invalidation, stale reads, tenant/user cache-key isolation, and cache-failure behavior
 - queue lag, idempotent worker retries, timeouts, backoff/jitter, and failure containment
-- WebSocket/SSE transport choice and reconnect behavior when realtime features exist
+- WebSocket/SSE/long-polling transport choice and reconnect behavior when realtime features exist
+- dead-letter queues, scheduled-job overlap, worker backpressure, and safe redrive
+- replica lag, partition/shard strategy, migration compatibility, and concurrency invariants where relevant
+- autoscaling signals, cold starts, serverless quotas, tail latency, and resource limits
 
 ### Cost and resource exhaustion
 
